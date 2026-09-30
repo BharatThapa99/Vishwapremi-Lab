@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vishwapremi Lab · Modern Teacher Workspace</title>
+  <style>
+    :root {
+      --bg-base: #0a0e17;
+      --bg-surface: #111827;
+      --bg-card: rgba(17, 24, 39, 0.7);
+      --bg-card-hover: rgba(31, 41, 55, 0.85);
+      --bg-header: rgba(10, 14, 23, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #3b82f6;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --text-subtle: #6b7280;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-light: rgba(59, 130, 246, 0.15);
+      --emerald: #10b981;
+      --emerald-light: rgba(16, 185, 129, 0.15);
+      --amber: #f59e0b;
+      --amber-light: rgba(245, 158, 11, 0.15);
+      --rose: #f43f5e;
+      --rose-light: rgba(244, 63, 94, 0.15);
+      --purple: #8b5cf6;
+      --purple-light: rgba(139, 92, 246, 0.15);
+      --indigo: #6366f1;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f1f5f9;
+      --bg-header: rgba(255, 255, 255, 0.9);
+      --border-subtle: #e2e8f0;
+      --border-focus: #2563eb;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 30px rgba(0,0,0,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+    body { background: var(--bg-base); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; flex-direction: column; user-select: none; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.25); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.4); }
+
+    /* SVG Icon System */
+    .icon { width: 18px; height: 18px; stroke-width: 2; stroke: currentColor; fill: none; stroke-linecap: round; stroke-linejoin: round; display: inline-block; vertical-align: middle; flex-shrink: 0; }
+    .icon-sm { width: 14px; height: 14px; }
+    .icon-lg { width: 22px; height: 22px; }
+
+    /* Header Bar */
+    header {
+      background: var(--bg-header);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      z-index: 40;
+    }
+
+    .brand-section { display: flex; align-items: center; gap: 14px; }
+    .brand-logo {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, #2563eb, #10b981);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+    .brand-text h1 { font-size: 15px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-main); }
+    .brand-text p { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+
+    .header-center { display: flex; align-items: center; gap: 12px; }
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 5px 12px; border-radius: var(--radius-full);
+      font-size: 12px; font-weight: 600;
+      background: var(--emerald-light); color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .pulse-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
+
+    .stats-counter { font-size: 13px; font-weight: 600; color: var(--text-muted); }
+    .stats-counter strong { color: var(--text-main); font-weight: 700; }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 7px 14px; font-size: 13px; font-weight: 600;
+      border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);
+      background: var(--bg-surface); color: var(--text-main);
+      cursor: pointer; transition: var(--transition);
+      white-space: nowrap; outline: none;
+    }
+    .btn:hover { background: var(--bg-card-hover); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-primary { background: var(--primary); color: white; border-color: transparent; box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3); }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-emerald { background: var(--emerald); color: white; border-color: transparent; }
+    .btn-emerald:hover { background: #059669; }
+    .btn-purple { background: var(--purple); color: white; border-color: transparent; }
+    .btn-purple:hover { background: #7c3aed; }
+    .btn-rose { background: var(--rose); color: white; border-color: transparent; }
+    .btn-rose:hover { background: #e11d48; }
+    .btn-icon { width: 34px; height: 34px; padding: 0; border-radius: var(--radius-sm); }
+
+    /* Subheader & Search Bar */
+    .toolbar {
+      padding: 12px 24px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+
+    .tool-groups { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .divider-v { width: 1px; height: 24px; background: var(--border-subtle); margin: 0 4px; }
+
+    .search-wrapper { position: relative; width: 260px; }
+    .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-subtle); pointer-events: none; }
+    .search-input {
+      width: 100%; height: 34px;
+      padding: 0 12px 0 34px;
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      color: var(--text-main); font-size: 13px; outline: none;
+      transition: var(--transition);
+    }
+    .search-input:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15); }
+    .search-input::placeholder { color: var(--text-subtle); }
+
+    .view-toggles { display: flex; background: var(--bg-base); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 2px; }
+    .view-btn { padding: 5px 9px; border-radius: 4px; border: none; background: transparent; color: var(--text-subtle); cursor: pointer; transition: var(--transition); }
+    .view-btn.active { background: var(--bg-surface); color: var(--text-main); box-shadow: var(--shadow-sm); }
+
+    /* Main Grid View */
+    main {
+      flex: 1; overflow-y: auto; padding: 20px 24px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    /* Computer Card */
+    .pc-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .pc-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    .pc-card.selected {
+      border-color: var(--primary);
+      background: rgba(59, 130, 246, 0.08);
+      box-shadow: 0 0 0 2px var(--primary);
+    }
+    .pc-card.offline { opacity: 0.65; }
+    .pc-card.offline:hover { opacity: 0.9; }
+
+    .card-header {
+      padding: 10px 12px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(0,0,0,0.15);
+    }
+    .card-title-group { display: flex; align-items: center; gap: 8px; }
+    .card-checkbox {
+      width: 16px; height: 16px; border-radius: 4px;
+      cursor: pointer; accent-color: var(--primary);
+    }
+    .card-name { font-size: 14px; font-weight: 700; color: var(--text-main); letter-spacing: 0.3px; }
+    
+    .card-badge {
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: var(--radius-full);
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .badge-online { background: var(--emerald-light); color: var(--emerald); }
+    .badge-offline { background: rgba(107, 114, 128, 0.15); color: #9ca3af; }
+    .badge-pairing { background: var(--amber-light); color: var(--amber); }
+
+    .card-preview {
+      height: 130px; background: rgba(0,0,0,0.3);
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card-preview img { width: 100%; height: 100%; object-fit: cover; }
+    .card-preview-placeholder {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 6px; color: var(--text-subtle);
+    }
+    .card-preview-placeholder span { font-size: 11px; }
+
+    .card-overlay-actions {
+      position: absolute; inset: 0; background: rgba(10, 14, 23, 0.85);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .pc-card:hover .card-overlay-actions { opacity: 1; pointer-events: auto; }
+
+    .card-footer {
+      padding: 10px 12px;
+      display: flex; flex-direction: column; gap: 4px;
+      font-size: 11.5px; color: var(--text-muted);
+    }
+    .footer-row { display: flex; justify-content: space-between; align-items: center; }
+    .footer-user { font-weight: 600; color: var(--text-main); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; }
+
+    /* Table View */
+    .table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+    th {
+      background: rgba(0,0,0,0.25);
+      padding: 10px 16px; font-weight: 600; color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    td { padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); color: var(--text-main); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--bg-card-hover); }
+    tr.selected td { background: rgba(59, 130, 246, 0.08); }
+
+    /* Floating Multi-Select Action Dock */
+    .selection-dock {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: rgba(17, 24, 39, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(59, 130, 246, 0.2);
+      border-radius: var(--radius-full);
+      padding: 8px 18px;
+      display: flex; align-items: center; gap: 14px;
+      z-index: 50; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .selection-dock.active { transform: translateX(-50%) translateY(0); }
+    .dock-count { font-size: 13px; font-weight: 700; color: var(--text-main); white-space: nowrap; }
+
+    /* Bottom Activity Drawer */
+    .activity-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .activity-header {
+      padding: 10px 16px; display: flex; justify-content: space-between; align-items: center;
+      background: rgba(0,0,0,0.15); border-bottom: 1px solid var(--border-subtle);
+      font-size: 12.5px; font-weight: 600; color: var(--text-muted);
+    }
+    .activity-list { max-height: 140px; overflow-y: auto; }
+    .activity-item {
+      padding: 8px 16px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle); font-size: 12px;
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-item:hover { background: var(--bg-card-hover); }
+    .tag-executed { color: var(--emerald); font-weight: 600; }
+    .tag-waiting { color: var(--amber); font-weight: 600; }
+    .tag-failed { color: var(--rose); font-weight: 600; }
+
+    /* Modal System */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 100; opacity: 0; transition: opacity 0.2s;
+    }
+    .modal-backdrop.open { display: flex; opacity: 1; }
+    .modal-window {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      width: 90%; max-width: 520px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      transform: scale(0.95); transition: transform 0.2s;
+    }
+    .modal-backdrop.open .modal-window { transform: scale(1); }
+    .modal-header {
+      padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .modal-header h3 { font-size: 16px; font-weight: 700; color: var(--text-main); }
+    .modal-close { background: none; border: none; color: var(--text-subtle); cursor: pointer; }
+    .modal-close:hover { color: var(--text-main); }
+    .modal-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .modal-footer {
+      padding: 14px 20px; background: rgba(0,0,0,0.15);
+      border-top: 1px solid var(--border-subtle);
+      display: flex; justify-content: flex-end; gap: 10px;
+    }
+
+    /* Form Controls */
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 12.5px; font-weight: 600; color: var(--text-muted); }
+    .form-input, .form-textarea, .form-select {
+      width: 100%; padding: 9px 12px;
+      background: var(--bg-base); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm); color: var(--text-main);
+      font-size: 13.5px; outline: none; transition: var(--transition);
+    }
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+    .form-textarea { resize: vertical; min-height: 90px; }
+
+    .preset-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .chip {
+      padding: 4px 10px; font-size: 11.5px; font-weight: 500;
+      background: var(--bg-card); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full); cursor: pointer; color: var(--text-muted);
+      transition: var(--transition);
+    }
+    .chip:hover { color: var(--text-main); border-color: var(--border-focus); background: var(--primary-light); }
+
+    /* Toast Notification */
+    .toast-container { position: fixed; top: 20px; right: 24px; z-index: 110; display: flex; flex-direction: column; gap: 8px; }
+    .toast {
+      background: var(--bg-surface); border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-lg); border-radius: var(--radius-md);
+      padding: 12px 18px; display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 500; color: var(--text-main);
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="brand-section">
+      <div class="brand-logo">
+        <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7"/></svg>
+      </div>
+      <div class="brand-text">
+        <h1>Shree Vishwapremi Secondary School</h1>
+        <p>Arun 5, Yaku, Bhojpur • Computer Lab Workspace</p>
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="status-pill" id="controllerPill">
+        <div class="pulse-dot"></div>
+        <span id="controllerStatus">Controller Active</span>
+      </div>
+      <div class="stats-counter" id="statsCounter">
+        <strong id="onlineCount">0</strong> / <span id="totalCount">0</span> Online
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn btn-icon" title="Toggle Theme" id="btnTheme" onclick="toggleTheme()">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+      <button class="btn" title="Switch to Classic Windows Grid" onclick="postToCSharp({ type: 'toggle-ui' })">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18M9 21V9"/></svg> Classic View
+      </button>
+      <button class="btn" title="Add Computer" onclick="openModal('modalAddPc')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg> Add PC
+      </button>
+      <button class="btn" title="Lab Profile Backup" onclick="openModal('modalBackup')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m14-7-5-5-5 5m5-5v12"/></svg> Backup
+      </button>
+      <button class="btn" title="Help & Shortcuts" onclick="openModal('modalHelp')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3m.08 4h.01"/></svg> Help
+      </button>
+    </div>
+  </header>
+
+  <!-- Action Toolbar & Filter Controls -->
+  <div class="toolbar">
+    <div class="tool-groups">
+      <button class="btn btn-primary" onclick="triggerAction('screen-monitor')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+        Live Screens
+      </button>
+      <button class="btn btn-purple" onclick="triggerAction('reverse-share')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/></svg>
+        Reverse Share
+      </button>
+      <button class="btn btn-emerald" onclick="triggerAction('remote-control')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>
+        Remote Control
+      </button>
+
+      <div class="divider-v"></div>
+
+      <button class="btn" onclick="triggerAction('share-file')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+        Share File
+      </button>
+      <button class="btn" onclick="openModal('modalWebsite')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg>
+        Open Website
+      </button>
+      <button class="btn" onclick="openModal('modalNotice')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Send Notice
+      </button>
+
+      <div class="divider-v"></div>
+
+      <button class="btn" onclick="confirmAction('lock', 'Lock Windows on selected computers?')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Lock PCs
+      </button>
+      <button class="btn" onclick="openModal('modalPower')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Power
+      </button>
+      <button class="btn" onclick="openModal('modalFilter')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Internet Control
+      </button>
+      <button class="btn" onclick="triggerAction('update-student-apps')">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+        Update Apps
+      </button>
+    </div>
+
+    <!-- Search & Layout Toggle -->
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div class="search-wrapper">
+        <svg class="icon icon-sm search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search computers, users…" oninput="render()">
+      </div>
+
+      <div class="view-toggles">
+        <button class="view-btn active" id="btnViewGrid" title="Grid View" onclick="setViewMode('grid')">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+        </button>
+        <button class="view-btn" id="btnViewTable" title="List View" onclick="setViewMode('table')">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Workstation View Area -->
+  <main>
+    <!-- Grid View Container -->
+    <div class="grid-container" id="gridContainer"></div>
+
+    <!-- Table View Container -->
+    <div class="table-container" id="tableContainer" style="display: none;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 40px;"><input type="checkbox" id="thSelectAll" onchange="toggleSelectAll(this.checked)"></th>
+            <th>Computer</th>
+            <th>Status</th>
+            <th>Logged User</th>
+            <th>Device Host</th>
+            <th>Last Seen</th>
+            <th style="text-align: right;">Quick Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Recent Activity Drawer -->
+    <div class="activity-section">
+      <div class="activity-header">
+        <span>Recent Classroom Actions</span>
+        <span style="font-size:11px; color:var(--text-subtle);">Auto-refreshing</span>
+      </div>
+      <div class="activity-list" id="activityList">
+        <div style="padding: 16px; text-align: center; color: var(--text-subtle); font-size: 12px;">No recent commands recorded</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Multi-select Floating Action Dock -->
+  <div class="selection-dock" id="selectionDock">
+    <div class="dock-count" id="dockSelectedCount">0 Selected</div>
+    <div class="divider-v" style="height: 18px;"></div>
+    <button class="btn btn-sm btn-primary" onclick="openModal('modalNotice')">Notice</button>
+    <button class="btn btn-sm btn-purple" onclick="openModal('modalWebsite')">Website</button>
+    <button class="btn btn-sm btn-rose" onclick="confirmAction('lock', 'Lock selected Windows computers?')">Lock</button>
+    <button class="btn btn-sm" onclick="openModal('modalPower')">Power</button>
+    <button class="btn btn-sm" onclick="clearSelection()">Clear</button>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modals -->
+
+  <!-- Modal: Send Notice -->
+  <div class="modal-backdrop" id="modalNotice">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>💬 Send Classroom Notice</h3>
+        <button class="modal-close" onclick="closeModal('modalNotice')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Message Content (displays prominently on selected student screens):</label>
+          <textarea class="form-textarea" id="noticeInput" maxlength="500" placeholder="e.g. Please save your Python files and open page 42."></textarea>
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:var(--text-subtle);">
+            <span>Visible to all selected computers</span>
+            <span id="noticeCount">0 / 500</span>
+          </div>
+        </div>
+        <div class="preset-chips">
+          <span class="chip" onclick="setNotice('Please save your work and look up at the board.')">Board Attention</span>
+          <span class="chip" onclick="setNotice('5 minutes remaining for today\'s lab assignment.')">5 Min Warning</span>
+          <span class="chip" onclick="setNotice('Please close all games and return to your code editor.')">Focus Warning</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modalNotice')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitNotice()">Broadcast Notice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Open Website -->
+  <div class="modal-backdrop" id="modalWebsite">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>🌐 Open Lesson Website</h3>
+        <button class="modal-close" onclick="closeModal('modalWebsite')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Website Address (URL):</label>
+          <input type="text" class="form-input" id="websiteInput" placeholder="https://..." value="https://">
+        </div>
+        <div class="preset-chips">
+          <span class="chip" onclick="setWebsite('https://wikipedia.org')">Wikipedia</span>
+          <span class="chip" onclick="setWebsite('https://scratch.mit.edu')">Scratch</span>
+          <span class="chip" onclick="setWebsite('https://khanacademy.org')">Khan Academy</span>
+          <span class="chip" onclick="setWebsite('https://docs.python.org/3')">Python Docs</span>
+          <span class="chip" onclick="setWebsite('https://geogebra.org')">GeoGebra</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modalWebsite')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitWebsite()">Launch on Selected PCs</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Power Management -->
+  <div class="modal-backdrop" id="modalPower">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>⚡ Classroom Power Controls</h3>
+        <button class="modal-close" onclick="closeModal('modalPower')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px; color:var(--text-muted);">Choose a power action to apply to selected computers:</p>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+          <button class="btn btn-rose" style="padding:14px;" onclick="submitPower('shutdown')">🛑 Shut Down PCs</button>
+          <button class="btn btn-purple" style="padding:14px;" onclick="submitPower('restart')">🔄 Restart PCs</button>
+          <button class="btn" style="padding:14px;" onclick="submitPower('sleep')">💤 Sleep / Standby</button>
+          <button class="btn" style="padding:14px;" onclick="submitPower('logoff')">👤 Log Off Users</button>
+        </div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-emerald" style="width:100%; padding:12px;" onclick="submitPower('wake')">⚡ Wake-on-LAN (Turn On Sleeping PCs)</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modalPower')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Internet Filtering -->
+  <div class="modal-backdrop" id="modalFilter">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>🛡️ Internet & Website Filter</h3>
+        <button class="modal-close" onclick="closeModal('modalFilter')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; gap:10px; margin-bottom:6px;">
+          <button class="btn btn-rose" style="flex:1;" onclick="submitFilterAction('block-internet')">🚫 Block All Internet</button>
+          <button class="btn btn-emerald" style="flex:1;" onclick="submitFilterAction('allow-internet')">🌐 Unblock All</button>
+        </div>
+        <div class="form-group">
+          <label>Website Domain Rules (one per line, e.g. youtube.com):</label>
+          <textarea class="form-textarea" id="filterDomains" placeholder="youtube.com&#10;facebook.com&#10;discord.com"></textarea>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn" style="flex:1;" onclick="submitFilter('blacklist')">Blacklist These Sites</button>
+          <button class="btn" style="flex:1;" onclick="submitFilter('whitelist')">Whitelist Only These</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-sm" onclick="submitFilterAction('clear-filter')">Clear All Rules</button>
+        <button class="btn btn-sm" onclick="closeModal('modalFilter')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add PC -->
+  <div class="modal-backdrop" id="modalAddPc">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>➕ Add Student Computer</h3>
+        <button class="modal-close" onclick="closeModal('modalAddPc')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:12.5px; color:var(--text-muted);">
+          1. Name the student computer.<br>
+          2. Save the pairing file (.vplab) to a USB drive.<br>
+          3. Open Vishwapremi Student on that PC and import the file.
+        </p>
+        <div class="form-group">
+          <label>Computer Name:</label>
+          <input type="text" class="form-input" id="newPcName" placeholder="LAB-01" value="LAB-01">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modalAddPc')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitAddPc()">Generate Pairing File…</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Backup & Migration -->
+  <div class="modal-backdrop" id="modalBackup">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3>📦 Lab Profile Backup & Migration</h3>
+        <button class="modal-close" onclick="closeModal('modalBackup')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:12.5px; color:var(--text-muted);">
+          Switching to another teacher laptop or smartboard? Export your profile to move all 30 student computers instantly with zero USB repairing!
+        </p>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <button class="btn btn-primary" style="padding:12px;" onclick="triggerAction('export-profile')">
+            📤 Export Lab Profile (.vpbak)
+          </button>
+          <button class="btn" style="padding:12px;" onclick="triggerAction('import-profile')">
+            📥 Import Lab Profile from USB
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('modalBackup')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Help -->
+  <div class="modal-backdrop" id="modalHelp">
+    <div class="modal-window" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3>📖 Vishwapremi Lab Guide & Shortcuts</h3>
+        <button class="modal-close" onclick="closeModal('modalHelp')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      </div>
+      <div class="modal-body" style="font-size:13px; line-height:1.6; color:var(--text-muted); max-height: 420px; overflow-y:auto;">
+        <h4 style="color:var(--text-main); margin-bottom:4px;">🎮 Remote Control & Assistance</h4>
+        <p>Select any online student computer and click <strong>Remote Control</strong>. You can click, drag, scroll, and type directly on their desktop in real-time over encrypted TLS.</p>
+        
+        <h4 style="color:var(--text-main); margin-top:12px; margin-bottom:4px;">📺 Reverse Sharing (Smartboard Projection)</h4>
+        <p>Project a student's screen in 1080p onto the teacher monitor or smartboard. Press <kbd>Space</kbd> to freeze frame, or <kbd>F11</kbd> for true borderless fullscreen.</p>
+
+        <h4 style="color:var(--text-main); margin-top:12px; margin-bottom:4px;">📦 Zero-USB Profile Migration</h4>
+        <p>Export your encrypted <kbd>.vpbak</kbd> profile. When importing on another laptop or smartboard, all student PCs reconnect automatically.</p>
+
+        <h4 style="color:var(--text-main); margin-top:12px; margin-bottom:4px;">⚡ Power Controls & Wake-on-LAN</h4>
+        <p>Remotely shut down, restart, sleep, or wake up computers without walking to each desk.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="closeModal('modalHelp')">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State Store
+    let labState = {
+      devices: [],
+      commands: [],
+      controllerActive: true,
+      selectedIds: new Set(),
+      viewMode: 'grid',
+      theme: 'dark'
+    };
+
+    // Bridge with C#
+    function postToCSharp(message) {
+      if (window.chrome && window.chrome.webview) {
+        window.chrome.webview.postMessage(message);
+      } else {
+        console.log('[WebView2 Mock Message]', message);
+      }
+    }
+
+    // Called by C# Controller
+    window.updateLabState = function(state) {
+      if (!state) return;
+      if (state.devices) labState.devices = state.devices;
+      if (state.commands) labState.commands = state.commands;
+      if (state.controllerActive !== undefined) labState.controllerActive = state.controllerActive;
+      render();
+    };
+
+    // Render Function
+    function render() {
+      // Header stats
+      const onlineCount = labState.devices.filter(d => d.online).length;
+      document.getElementById('onlineCount').textContent = onlineCount;
+      document.getElementById('totalCount').textContent = labState.devices.length;
+
+      // Status pill
+      const pill = document.getElementById('controllerPill');
+      const pillText = document.getElementById('controllerStatus');
+      if (labState.controllerActive) {
+        pill.style.background = 'var(--emerald-light)';
+        pill.style.color = 'var(--emerald)';
+        pillText.textContent = 'Controller Active';
+      } else {
+        pill.style.background = 'var(--rose-light)';
+        pill.style.color = 'var(--rose)';
+        pillText.textContent = 'Controller Offline';
+      }
+
+      // Filter devices
+      const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+      const filtered = labState.devices.filter(d => {
+        if (!query) return true;
+        return (d.name || '').toLowerCase().includes(query) ||
+               (d.user || '').toLowerCase().includes(query) ||
+               (d.computer || '').toLowerCase().includes(query);
+      });
+
+      // Render Grid
+      const grid = document.getElementById('gridContainer');
+      grid.innerHTML = '';
+      filtered.forEach(d => {
+        const isSelected = labState.selectedIds.has(d.id);
+        const card = document.createElement('div');
+        card.className = `pc-card ${isSelected ? 'selected' : ''} ${!d.online ? 'offline' : ''}`;
+        
+        let statusBadge = `<span class="card-badge badge-online">● Online</span>`;
+        if (!d.online) {
+          statusBadge = d.tokenHash ? `<span class="card-badge badge-offline">○ Offline</span>` : `<span class="card-badge badge-pairing">⏳ Pairing</span>`;
+        }
+
+        const previewContent = d.thumbnailBase64
+          ? `<img src="data:image/jpeg;base64,${d.thumbnailBase64}" alt="${d.name}" />`
+          : `<div class="card-preview-placeholder">
+               <svg class="icon icon-lg" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+               <span>${d.online ? 'Active Screen' : 'Offline'}</span>
+             </div>`;
+
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="card-title-group">
+              <input type="checkbox" class="card-checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); toggleSelect('${d.id}')">
+              <span class="card-name">${escapeHtml(d.name)}</span>
+            </div>
+            ${statusBadge}
+          </div>
+          <div class="card-preview">
+            ${previewContent}
+            <div class="card-overlay-actions">
+              <button class="btn btn-sm btn-emerald" onclick="event.stopPropagation(); startAssist('${d.id}')">🎮 Assist</button>
+              <button class="btn btn-sm btn-purple" onclick="event.stopPropagation(); startShare('${d.id}')">📺 Project</button>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="footer-row">
+              <span class="footer-user">${escapeHtml(d.user || '—')}</span>
+              <span>${escapeHtml(d.computer || '—')}</span>
+            </div>
+            <div class="footer-row" style="color:var(--text-subtle);">
+              <span>Seen: ${escapeHtml(d.seen || 'Just now')}</span>
+              <span>${d.online ? '🟢 8766' : '⚪'}</span>
+            </div>
+          </div>
+        `;
+        card.onclick = () => toggleSelect(d.id);
+        grid.appendChild(card);
+      });
+
+      // Render Table
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+      filtered.forEach(d => {
+        const isSelected = labState.selectedIds.has(d.id);
+        const tr = document.createElement('tr');
+        if (isSelected) tr.className = 'selected';
+        tr.innerHTML = `
+          <td><input type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); toggleSelect('${d.id}')"></td>
+          <td style="font-weight:700;">${escapeHtml(d.name)}</td>
+          <td>${d.online ? '<span class="card-badge badge-online">Connected</span>' : '<span class="card-badge badge-offline">Offline</span>'}</td>
+          <td>${escapeHtml(d.user || '—')}</td>
+          <td>${escapeHtml(d.computer || '—')}</td>
+          <td>${escapeHtml(d.seen || '—')}</td>
+          <td style="text-align:right;">
+            <button class="btn btn-sm" onclick="event.stopPropagation(); startAssist('${d.id}')">🎮 Assist</button>
+            <button class="btn btn-sm" onclick="event.stopPropagation(); startShare('${d.id}')">📺 Project</button>
+          </td>
+        `;
+        tr.onclick = () => toggleSelect(d.id);
+        tbody.appendChild(tr);
+      });
+
+      // Update Selection Dock
+      const dock = document.getElementById('selectionDock');
+      const countLabel = document.getElementById('dockSelectedCount');
+      const selCount = labState.selectedIds.size;
+      if (selCount > 0) {
+        dock.classList.add('active');
+        countLabel.textContent = `${selCount} Computer${selCount > 1 ? 's' : ''} Selected`;
+      } else {
+        dock.classList.remove('active');
+      }
+
+      // Render Activity History
+      const actList = document.getElementById('activityList');
+      if (labState.commands && labState.commands.length > 0) {
+        actList.innerHTML = labState.commands.slice(0, 8).map(c => {
+          let tagClass = 'tag-executed';
+          if (c.status === 'Waiting') tagClass = 'tag-waiting';
+          else if (c.status === 'Failed') tagClass = 'tag-failed';
+          return `
+            <div class="activity-item">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span style="color:var(--text-subtle);">${escapeHtml(c.time || 'Now')}</span>
+                <strong style="color:var(--text-main);">${escapeHtml(c.pc || 'PC')}</strong>
+                <span>${escapeHtml(c.action || 'Command')}</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span class="${tagClass}">${escapeHtml(c.status || 'Done')}</span>
+                <span style="color:var(--text-subtle); font-size:11px;">${escapeHtml(c.detail || '')}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Selection Handlers
+    function toggleSelect(id) {
+      if (labState.selectedIds.has(id)) labState.selectedIds.delete(id);
+      else labState.selectedIds.add(id);
+      render();
+    }
+    function clearSelection() {
+      labState.selectedIds.clear();
+      render();
+    }
+    function toggleSelectAll(checked) {
+      if (checked) {
+        labState.devices.forEach(d => labState.selectedIds.add(d.id));
+      } else {
+        labState.selectedIds.clear();
+      }
+      render();
+    }
+
+    // View Modes
+    function setViewMode(mode) {
+      labState.viewMode = mode;
+      document.getElementById('btnViewGrid').classList.toggle('active', mode === 'grid');
+      document.getElementById('btnViewTable').classList.toggle('active', mode === 'table');
+      document.getElementById('gridContainer').style.display = mode === 'grid' ? 'grid' : 'none';
+      document.getElementById('tableContainer').style.display = mode === 'table' ? 'block' : 'none';
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      const isLight = document.body.getAttribute('data-theme') === 'light';
+      document.body.setAttribute('data-theme', isLight ? 'dark' : 'light');
+    }
+
+    // Quick Actions
+    function startAssist(deviceId) {
+      postToCSharp({ type: 'remote-control', deviceId: deviceId });
+    }
+    function startShare(deviceId) {
+      postToCSharp({ type: 'reverse-share', deviceId: deviceId });
+    }
+    function triggerAction(actionName) {
+      const ids = Array.from(labState.selectedIds);
+      postToCSharp({ type: actionName, ids: ids });
+    }
+    function confirmAction(actionName, message) {
+      const ids = Array.from(labState.selectedIds);
+      if (ids.length === 0) {
+        showToast('Please select one or more computers first.', 'warning');
+        return;
+      }
+      if (confirm(message)) {
+        postToCSharp({ type: 'queue-action', action: actionName, ids: ids, value: '' });
+        clearSelection();
+        showToast(`Sent ${actionName} command to selected computers.`);
+      }
+    }
+
+    // Modal Control
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    // Modal Submit Handlers
+    function setNotice(text) {
+      document.getElementById('noticeInput').value = text;
+      document.getElementById('noticeCount').textContent = `${text.length} / 500`;
+    }
+    document.getElementById('noticeInput').addEventListener('input', e => {
+      document.getElementById('noticeCount').textContent = `${e.target.value.length} / 500`;
+    });
+    function submitNotice() {
+      const val = document.getElementById('noticeInput').value.trim();
+      if (!val) return;
+      const ids = Array.from(labState.selectedIds);
+      postToCSharp({ type: 'queue-action', action: 'message', ids: ids, value: val });
+      closeModal('modalNotice');
+      clearSelection();
+      showToast('Notice sent to selected computers.');
+    }
+
+    function setWebsite(url) {
+      document.getElementById('websiteInput').value = url;
+    }
+    function submitWebsite() {
+      const val = document.getElementById('websiteInput').value.trim();
+      if (!val) return;
+      const ids = Array.from(labState.selectedIds);
+      postToCSharp({ type: 'queue-action', action: 'website', ids: ids, value: val });
+      closeModal('modalWebsite');
+      clearSelection();
+      showToast('Website launched on student screens.');
+    }
+
+    function submitPower(action) {
+      const ids = Array.from(labState.selectedIds);
+      if (ids.length === 0) {
+        showToast('Select one or more computers first.', 'warning');
+        return;
+      }
+      postToCSharp({ type: 'power', action: action, ids: ids });
+      closeModal('modalPower');
+      clearSelection();
+      showToast(`Power command (${action}) submitted.`);
+    }
+
+    function submitFilterAction(action) {
+      const ids = Array.from(labState.selectedIds);
+      postToCSharp({ type: 'queue-action', action: action, ids: ids, value: '' });
+      closeModal('modalFilter');
+      showToast(`Applied ${action}.`);
+    }
+
+    function submitFilter(type) {
+      const val = document.getElementById('filterDomains').value.trim();
+      const ids = Array.from(labState.selectedIds);
+      if (!val) {
+        showToast('Enter at least one domain name.', 'warning');
+        return;
+      }
+      postToCSharp({ type: 'queue-action', action: type, ids: ids, value: val });
+      closeModal('modalFilter');
+      showToast(`Applied ${type} list.`);
+    }
+
+    function submitAddPc() {
+      const name = document.getElementById('newPcName').value.trim();
+      postToCSharp({ type: 'add-computer', name: name });
+      closeModal('modalAddPc');
+    }
+
+    // Toast System
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Initialize with mock data if opened in browser directly
+    if (!window.chrome || !window.chrome.webview) {
+      const mockDevices = [];
+      for (let i = 1; i <= 16; i++) {
+        mockDevices.push({
+          id: 'dev-' + i,
+          name: 'LAB-' + String(i).padStart(2, '0'),
+          online: i <= 12,
+          user: i <= 12 ? 'student' + i : '—',
+          computer: 'PC-' + i,
+          seen: i <= 12 ? 'Online' : '10m ago',
+          tokenHash: 'abc'
+        });
+      }
+      window.updateLabState({
+        devices: mockDevices,
+        commands: [
+          { time: '11:40 AM', pc: 'All PCs', action: 'Internet Unblocked', status: 'Executed', detail: 'Outbound restored' },
+          { time: '11:35 AM', pc: 'LAB-04', action: 'Remote Assistance', status: 'Executed', detail: 'Teacher connected' },
+          { time: '11:30 AM', pc: 'LAB-09', action: 'Lesson Website', status: 'Executed', detail: 'https://scratch.mit.edu' }
+        ],
+        controllerActive: true
+      });
+    }
+  </script>
+</body>
+</html>

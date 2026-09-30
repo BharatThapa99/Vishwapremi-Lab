@@ -1,6 +1,10 @@
 using System.Diagnostics;
 using System.Net;
+using System.Reflection;
 using System.Security.Cryptography;
+using System.Text.Json;
+using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.WinForms;
 
 namespace Vishwapremi;
 
@@ -13,12 +17,18 @@ internal sealed class TeacherForm : Form
     private readonly TextBox searchBox=new(){Width=220,Font=new Font("Segoe UI",9.5f),PlaceholderText="🔍 Search computers…"};
     private readonly System.Windows.Forms.Timer timer=new(){Interval=3000};
     private readonly NotifyIcon tray=new(){Icon=SystemIcons.Application,Text="Vishwapremi Teacher",Visible=true};
-    private bool exiting,ready,locked;
+    private readonly TableLayoutPanel root;
+    private readonly WebView2 webView=new();
+    private bool exiting,ready,locked,webViewReady,modernUiActive=true;
     public TeacherForm(LabStore store)
     {
-        this.store=store;Text="Vishwapremi · Teacher workspace";Size=new Size(1180,830);MinimumSize=new Size(960,700);StartPosition=FormStartPosition.CenterScreen;BackColor=Desktop.Paper;Font=new Font("Segoe UI",10);AutoScaleMode=AutoScaleMode.Dpi;
-        var root=new TableLayoutPanel {Dock=DockStyle.Fill,ColumnCount=1,RowCount=7,Padding=new Padding(24)};
-        root.RowStyles.Add(new RowStyle(SizeType.Absolute,96));root.RowStyles.Add(new RowStyle(SizeType.Absolute,52));root.RowStyles.Add(new RowStyle(SizeType.Percent,58));root.RowStyles.Add(new RowStyle(SizeType.Absolute,62));root.RowStyles.Add(new RowStyle(SizeType.Absolute,46));root.RowStyles.Add(new RowStyle(SizeType.Percent,42));root.RowStyles.Add(new RowStyle(SizeType.Absolute,48));Controls.Add(root);
+        this.store=store;Text="Vishwapremi · Teacher workspace";Size=new Size(1280,850);MinimumSize=new Size(960,700);StartPosition=FormStartPosition.CenterScreen;BackColor=Desktop.Paper;Font=new Font("Segoe UI",10);AutoScaleMode=AutoScaleMode.Dpi;
+        root=new TableLayoutPanel {Dock=DockStyle.Fill,ColumnCount=1,RowCount=7,Padding=new Padding(24)};
+        root.RowStyles.Add(new RowStyle(SizeType.Absolute,96));root.RowStyles.Add(new RowStyle(SizeType.Absolute,52));root.RowStyles.Add(new RowStyle(SizeType.Percent,58));root.RowStyles.Add(new RowStyle(SizeType.Absolute,62));root.RowStyles.Add(new RowStyle(SizeType.Absolute,46));root.RowStyles.Add(new RowStyle(SizeType.Percent,42));root.RowStyles.Add(new RowStyle(SizeType.Absolute,48));
+        
+        webView.Dock=DockStyle.Fill;
+        Controls.Add(webView);
+        Controls.Add(root);
         
         var header=new TableLayoutPanel {Dock=DockStyle.Fill,BackColor=Desktop.Green,ColumnCount=2,RowCount=1,Padding=new Padding(20,12,20,12)};
         header.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,70));header.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,30));
@@ -31,6 +41,7 @@ internal sealed class TeacherForm : Form
         headerRight.Controls.Add(statusBadge);header.Controls.Add(headerRight,1,0);root.Controls.Add(header,0,0);
 
         var tools=new FlowLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(0,4,0,0)};
+        tools.Controls.Add(Desktop.Button("🎨 Modern Teams UI",(_,_)=>SwitchUi(true),true));
         tools.Controls.Add(Desktop.Button("🖥️ Live Screens",(_,_)=>OpenScreenMonitor(),true));tools.Controls.Add(Desktop.Button("🔄 Update Student Apps",(_,_)=>UpdateStudentApps()));tools.Controls.Add(Desktop.Button("+ Add computer",(_,_)=>AddComputer()));tools.Controls.Add(Desktop.Button("📦 Export Profile",(_,_)=>ExportProfile()));tools.Controls.Add(Desktop.Button("📥 Import Profile",(_,_)=>ImportProfile()));tools.Controls.Add(Desktop.Button("Allow lab connections",(_,_)=>Firewall()));tools.Controls.Add(Desktop.Button("Remove selected",(_,_)=>Remove()));tools.Controls.Add(Desktop.Button("Lock teacher app",(_,_)=>LockApp()));tools.Controls.Add(Desktop.Button("Help",(_,_)=>Help()));root.Controls.Add(tools,0,1);
 
         StyleGrid(grid);grid.Columns.Add(new DataGridViewCheckBoxColumn{Name="Select",HeaderText="Select",Width=60});grid.Columns.Add("Name","Computer");grid.Columns.Add("State","Connection");grid.Columns.Add("User","Windows user");grid.Columns.Add("Host","Device name");grid.Columns.Add("Last","Last seen");
@@ -78,9 +89,19 @@ internal sealed class TeacherForm : Form
         var footer=new TableLayoutPanel{Dock=DockStyle.Fill,ColumnCount=2};footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,65));footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,35));status.Dock=DockStyle.Fill;footer.Controls.Add(status);var credit=Desktop.Label("Designed by Bharat Thapa",10,true);credit.Dock=DockStyle.Fill;credit.TextAlign=ContentAlignment.MiddleRight;footer.Controls.Add(credit);root.Controls.Add(footer,0,6);
         var menu=new ContextMenuStrip();menu.Items.Add("Open teacher workspace",null,(_,_)=>Restore());menu.Items.Add("Exit controller",null,(_,_)=>Exit());tray.ContextMenuStrip=menu;tray.DoubleClick+=(_,_)=>Restore();
         timer.Tick+=(_,_)=>RefreshRoom();
-        Shown+=async (_,_)=>{try {await controller.Start(store);ready=true;status.Text="Lab controller running · encrypted local connections";RefreshRoom();timer.Start();}catch(Exception e){Desktop.Error(new Exception("The controller could not listen on port 8766. Close other copies or check whether this port is in use.\n"+e.Message));status.Text="Controller is not running.";}};
+        Shown+=async (_,_)=>{
+            try {
+                await controller.Start(store);
+                ready=true;
+                status.Text="Lab controller running · encrypted local connections";
+                RefreshRoom();
+                timer.Start();
+                await InitializeModernUiAsync();
+            }
+            catch(Exception e){Desktop.Error(new Exception("The controller could not listen on port 8766. Close other copies or check whether this port is in use.\n"+e.Message));status.Text="Controller is not running.";}
+        };
         FormClosing+=(_,e)=>{if(!exiting&&e.CloseReason==CloseReason.UserClosing){e.Cancel=true;Hide();tray.ShowBalloonTip(2500,"Vishwapremi Lab","The lab controller is still running. Open it beside the Windows clock.",ToolTipIcon.Info);}};
-        FormClosed+=async (_,_)=>{timer.Stop();tray.Dispose();await controller.DisposeAsync();};
+        FormClosed+=async (_,_)=>{timer.Stop();tray.Dispose();webView.Dispose();await controller.DisposeAsync();};
     }
     private static void StyleGrid(DataGridView g)
     {
@@ -101,6 +122,7 @@ internal sealed class TeacherForm : Form
         }
         summary.Text=$"{snapshot.Devices.Count(d=>d.Online)} connected   /   {snapshot.Devices.Count} enrolled       •       Classroom Activity";
         history.Rows.Clear();foreach(var c in snapshot.Commands.OrderByDescending(c=>c.Created).Take(30))history.Rows.Add(c.Created.LocalDateTime.ToShortTimeString(),snapshot.Devices.Find(d=>d.Id==c.Device)?.Name??"Removed",c.Action switch {"website"=>"Open website","message"=>"Classroom notice","file"=>"Send file","update-app"=>"Update app","block-internet"=>"Block internet","allow-internet" or "unblock-internet"=>"Unblock internet","blacklist"=>"Blacklist sites","whitelist"=>"Whitelist sites","clear-filter"=>"Clear filters","shutdown"=>"Shut down PC","restart"=>"Restart PC","logoff"=>"Log off user","sleep"=>"Sleep PC","abort-shutdown"=>"Abort shutdown",_=>"Lock Windows"},c.Status=="Waiting"&&c.Expired?"Expired":c.Status,c.Detail);
+        PushStateToWebView();
     }
     private void AddComputer()
     {
@@ -405,6 +427,205 @@ internal sealed class TeacherForm : Form
     private void LockApp(){locked=true;Hide();Restore();}
     private void Restore(){if(locked){if(Desktop.AskPassword(null,false,store)==null)return;locked=false;}Show();WindowState=FormWindowState.Normal;Activate();}
     private void Exit(){if(MessageBox.Show("Stop the teacher controller? Student computers will disconnect until you open it again.","Exit controller",MessageBoxButtons.OKCancel)!=DialogResult.OK)return;exiting=true;Close();}
+    
+    private void SwitchUi(bool modern)
+    {
+        modernUiActive=modern;
+        if(modernUiActive && webViewReady)
+        {
+            webView.Visible=true;
+            root.Visible=false;
+            webView.BringToFront();
+        }
+        else
+        {
+            webView.Visible=false;
+            root.Visible=true;
+            root.BringToFront();
+        }
+    }
+
+    private async Task InitializeModernUiAsync()
+    {
+        try
+        {
+            var dataFolder=Path.Combine(Desktop.Folder("Teacher"),"WebView2Data");
+            var env=await CoreWebView2Environment.CreateAsync(null,dataFolder);
+            await webView.EnsureCoreWebView2Async(env);
+            webView.CoreWebView2.Settings.IsStatusBarEnabled=false;
+            webView.CoreWebView2.Settings.AreDefaultScriptDialogsEnabled=true;
+            webView.CoreWebView2.WebMessageReceived+=OnWebMessageReceived;
+
+            var html=LoadDashboardHtml();
+            webView.CoreWebView2.NavigateToString(html);
+            webViewReady=true;
+            SwitchUi(true);
+            PushStateToWebView();
+        }
+        catch
+        {
+            SwitchUi(false);
+        }
+    }
+
+    private static string LoadDashboardHtml()
+    {
+        var diskPath=Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Assets","dashboard.html");
+        if(File.Exists(diskPath))return File.ReadAllText(diskPath);
+
+        var asm=Assembly.GetExecutingAssembly();
+        var resName=asm.GetManifestResourceNames().FirstOrDefault(n=>n.EndsWith("dashboard.html"));
+        if(resName!=null)
+        {
+            using var stream=asm.GetManifestResourceStream(resName);
+            if(stream!=null)
+            {
+                using var reader=new StreamReader(stream);
+                return reader.ReadToEnd();
+            }
+        }
+        throw new FileNotFoundException("dashboard.html could not be found.");
+    }
+
+    private void OnWebMessageReceived(object? sender, CoreWebView2WebMessageReceivedEventArgs e)
+    {
+        try
+        {
+            using var doc=JsonDocument.Parse(e.WebMessageAsJson);
+            var rootEl=doc.RootElement;
+            var type=rootEl.GetProperty("type").GetString();
+
+            switch(type)
+            {
+                case "toggle-ui":
+                    SwitchUi(!modernUiActive);
+                    break;
+                case "screen-monitor":
+                    OpenScreenMonitor();
+                    break;
+                case "reverse-share":
+                    if(rootEl.TryGetProperty("deviceId",out var rsDev)&&!string.IsNullOrEmpty(rsDev.GetString()))
+                        StartReverseShare(rsDev.GetString()!);
+                    else
+                        ReverseShareSelected();
+                    break;
+                case "remote-control":
+                    if(rootEl.TryGetProperty("deviceId",out var rcDev)&&!string.IsNullOrEmpty(rcDev.GetString()))
+                        StartRemoteControl(rcDev.GetString()!);
+                    else
+                        RemoteControlSelected();
+                    break;
+                case "queue-action":
+                    var action=rootEl.GetProperty("action").GetString()!;
+                    var val=rootEl.TryGetProperty("value",out var vProp)?vProp.GetString()??"":"";
+                    var ids=rootEl.GetProperty("ids").EnumerateArray().Select(x=>x.GetString()!).ToArray();
+                    if(ids.Length>0)
+                    {
+                        var count=store.Queue(ids,action,val);
+                        status.Text=$"Sent {action} to {count} online computer(s).";
+                        RefreshRoom();
+                    }
+                    break;
+                case "power":
+                    var pAction=rootEl.GetProperty("action").GetString()!;
+                    var pIds=rootEl.GetProperty("ids").EnumerateArray().Select(x=>x.GetString()!).ToArray();
+                    ExecutePowerAction(pAction,pIds);
+                    break;
+                case "add-computer":
+                    AddComputer();
+                    break;
+                case "export-profile":
+                    ExportProfile();
+                    break;
+                case "import-profile":
+                    ImportProfile();
+                    break;
+                case "update-student-apps":
+                    UpdateStudentApps();
+                    break;
+                case "share-file":
+                    ShareFile();
+                    break;
+            }
+        }
+        catch(Exception ex)
+        {
+            Desktop.Error(ex);
+        }
+    }
+
+    private void ExecutePowerAction(string action,string[] ids)
+    {
+        if(ids.Length==0)
+        {
+            var sel=Selected();
+            if(sel.Length==0){MessageBox.Show("Select one or more computers first.","Power");return;}
+            ids=sel;
+        }
+        switch(action)
+        {
+            case "shutdown":
+                store.Queue(ids,"shutdown","15");
+                break;
+            case "restart":
+                store.Queue(ids,"restart","5");
+                break;
+            case "sleep":
+                store.Queue(ids,"sleep","");
+                break;
+            case "logoff":
+                store.Queue(ids,"logoff","");
+                break;
+            case "wake":
+                var snap=store.Snapshot();
+                var devs=snap.Devices.Where(d=>ids.Contains(d.Id)).ToList();
+                int sent=0;
+                foreach(var d in devs)
+                {
+                    if(!string.IsNullOrEmpty(d.Mac)&&NetworkSetup.SendWakeOnLan(d.Mac))sent++;
+                }
+                MessageBox.Show($"Sent Wake-on-LAN to {sent} computer(s).","Wake-on-LAN",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                break;
+        }
+        RefreshRoom();
+    }
+
+    private void PushStateToWebView()
+    {
+        if(!webViewReady)return;
+        try
+        {
+            var snap=store.Snapshot();
+            var devs=snap.Devices.OrderBy(d=>d.Name).Select(d=>new
+            {
+                id=d.Id,
+                name=d.Name,
+                online=d.Online,
+                user=d.User,
+                computer=d.Computer,
+                seen=d.Seen==default?"—":d.Seen.LocalDateTime.ToShortTimeString(),
+                tokenHash=d.TokenHash,
+                thumbnailBase64=ScreenStore.Get(d.Id) is byte[] b && b.Length>0?Convert.ToBase64String(b):null
+            }).ToList();
+
+            var cmds=snap.Commands.OrderByDescending(c=>c.Created).Take(20).Select(c=>new
+            {
+                time=c.Created.LocalDateTime.ToShortTimeString(),
+                pc=snap.Devices.Find(d=>d.Id==c.Device)?.Name??"Removed",
+                action=c.Action switch {"website"=>"Open website","message"=>"Notice","file"=>"Send file","update-app"=>"Update app","block-internet"=>"Block internet","allow-internet" or "unblock-internet"=>"Unblock internet","blacklist"=>"Blacklist sites","whitelist"=>"Whitelist sites","clear-filter"=>"Clear filters","shutdown"=>"Shutdown","restart"=>"Restart","logoff"=>"Logoff","sleep"=>"Sleep","abort-shutdown"=>"Abort shutdown",_=>"Lock"},
+                status=c.Status=="Waiting"&&c.Expired?"Expired":c.Status,
+                detail=c.Detail
+            }).ToList();
+
+            var state=new {devices=devs,commands=cmds,controllerActive=ready};
+            var json=JsonSerializer.Serialize(state);
+            webView.BeginInvoke(()=>{
+                try {_=webView.CoreWebView2.ExecuteScriptAsync($"window.updateLabState({json});");}catch{}
+            });
+        }
+        catch{}
+    }
+
     private sealed record NetworkChoice(string Address,string Adapter)
     {
         public override string ToString()=>$"{Address}  —  {Adapter}";

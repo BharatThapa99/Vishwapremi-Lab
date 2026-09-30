@@ -7,5 +7,12 @@
     <DebugType>none</DebugType><EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <Company>Shree Vishwapremi Secondary School</Company><Product>Vishwapremi Lab Teacher</Product><Version>1.1.0</Version>
   </PropertyGroup>
-  <ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App"/><Compile Include="../Shared/*.cs" Link="Shared/%(Filename)%(Extension)"/></ItemGroup>
+  <ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App" /><Compile Include="../Shared/*.cs" Link="Shared/%(Filename)%(Extension)" /></ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4258.31" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Assets\**" CopyToOutputDirectory="PreserveNewest" />
+    <EmbeddedResource Include="Assets\dashboard.html" />
+  </ItemGroup>
 </Project>
