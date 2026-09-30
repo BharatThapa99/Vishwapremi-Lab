@@ -1,0 +1,133 @@
+VISHWAPREMI LAB — VERSION 1.4
+Shree Vishwapremi Secondary School
+Arun 5, Yaku, Bhojpur
+Designed by Bharat Thapa
+
+============================================================
+WHAT IS NEW IN VERSION 1.4 (COMPLETE UI OVERHAUL & ENHANCEMENTS)
+============================================================
+
+1. MODERN DESIGN SYSTEM & UNIFIED COLOR PALETTE
+   - Replaced dated Windows 98/XP flat buttons with responsive, polished action buttons featuring subtle borders, custom mouse hover highlights, and active press states.
+   - Elegant school forest green theme (#184C38) with soft card backgrounds (#F6F8F5 / Paper), modern ink typography, and high-contrast status accents.
+   - Refined typography and spacing across all dialogs, toolbars, and cards.
+
+2. ENHANCED TEACHER DASHBOARD (TeacherForm)
+   - Prominent School Header:
+     Displays "SHREE VISHWAPREMI SECONDARY SCHOOL" with location and a live green status badge pill: "● CONTROLLER ACTIVE".
+   - Categorized Action Toolbar:
+     Divided into logical functional clusters with clean visual separators:
+     * Selection: [☑️ Select online] [◻️ Clear]
+     * Teaching: [📁 Share File] [🌐 Open Website] [💬 Send Notice]
+     * Classroom Control: [🔒 Lock PCs] [⚡ Power]
+     * Internet Policy: [🚫 Block Internet] [🌐 Unblock Internet] [⚙️ Filter Websites] [Clear Filters]
+   - Instant Real-Time Search Box:
+     Integrated "🔍 Search computers…" box in the summary bar that filters the student computers table in real time as you type (matches computer name, student user, or device hostname).
+   - Dynamic Status Chips in DataGrids:
+     * Computer table renders colored status badges:
+       - ● Connected (Emerald Green)
+       - ○ Offline (Muted Gray)
+       - ⏳ Pairing (Amber)
+     * Activity History renders clear outcome pills:
+       - ✓ Executed (Emerald Green)
+       - ✕ Failed (Crimson Red)
+       - ⏳ Waiting (Amber)
+       - — Expired (Muted Gray)
+   - Refined table header styling and row selection colors.
+
+3. MODERN CARD-BASED STUDENT TERMINAL (StudentForm)
+   - Top School Banner:
+     Forest green header with school identity, location, and a live status pill ("● CONNECTED", "⏳ SEARCHING", "○ NOT PAIRED", "✕ REVOKED").
+   - Dual-Card Layout:
+     * Card 1: Device & Classroom Status
+       - Assigned Computer name in bold font (e.g. LAB-01).
+       - Host computer name and Windows user account.
+       - Shield elevation status badge:
+         "🛡️ Administrator Privileges Active (Internet Control Enabled)" vs
+         "⚠️ Standard User Session (Click 'Enable Admin Control' below)".
+       - Real-time connection status with timestamp.
+     * Card 2: Student Tools & Controls
+       - [📁 Open Received Files]: One-click shortcut that opens the Desktop "Vishwapremi Files" folder.
+       - [🌐 Restore / Unblock Internet]: Emergency one-click button to reset firewall rules and clear website filters.
+       - [📥 Import / Replace Pairing File…]: Import pairing configuration.
+       - [🛡️ Enable Admin Control…]: Prominently displayed when running without elevation to register the elevated logon task.
+       - [Hide to Background]: Minimizes quietly to the system tray.
+   - System Tray Context Menu:
+     Added quick "Open Received Files" and "Unblock Internet (Emergency)" options directly beside the Windows clock.
+
+4. UPGRADED LIVE SCREEN MONITOR (ScreenMonitorForm)
+   - Real-Time Search Filter:
+     Added "🔍 Search PC name…" in the screen monitor toolbar to instantly filter visible student cards by computer or student name.
+   - Polished Student Screen Cards:
+     * Emerald top header when online, neutral gray when offline.
+     * Smooth hover buttons for [🔍 View], [🔒 Lock], [💬 Notice], [🌐 Unblock], and [⚡ Power].
+   - Full-Screen Viewer:
+     Spacious top control bar (56px) with timestamped live stream badge, primary "Back to Grid" button, and quick power/security controls.
+
+5. POWER CONTROLS, FILE SHARING & REMOTE AUTO-UPDATE (From v1.3)
+   - Full remote power management (Shutdown 15s/0s, Restart 5s, Logoff, Sleep, Wake-on-LAN AMD Magic Packets, Abort Shutdown).
+   - High-speed TLS file transfer directly to student Desktops with optional auto-open.
+   - Remote silent student auto-updating over local network with SHA-256 cryptographic verification.
+   - Full 15-minute streaming download timeout preventing HTTP timeouts on large files.
+
+6. ANTI-TAMPER & ANTI-UNINSTALL STUDENT PROTECTIONS
+   - Invisible in Add/Remove Programs:
+     The student installer sets `CreateUninstallRegKey=no` so Windows Settings ("Installed Apps") and Control Panel never list Vishwapremi Student. Students cannot simply click 'Uninstall'.
+   - Password-Protected Uninstaller:
+     If the uninstaller binary (`unins000.exe`) is launched directly, it presents a password dialog requiring teacher authentication (`vishwapremi`, `VishwapremiLab`, `teacher123`, or `ArunYaku5`). Unauthorized attempts are blocked.
+   - Locked System Tray Exit:
+     The unauthenticated "Exit" tray option is replaced by "Teacher Disconnect...", requiring a teacher authorization password to close or disconnect the client.
+   - 2-Minute Elevated Recovery Watchdog:
+     An elevated Windows scheduled task (`VishwapremiWatchdog`) runs every 2 minutes with highest system privileges (`/rl HIGHEST`). If a student attempts to terminate the app in Task Manager, the watchdog automatically and silently resurrects the student client in the background.
+
+7. REVERSE SHARING (SMARTBOARD / TEACHER MONITOR PROJECTION)
+   - One-Click Student Screen Projection:
+     Select any online student computer and click '📺 Reverse Share' (or double-click the computer in the list) to project that student's work in crisp 1080p onto the teacher monitor or classroom Windows smartboard.
+   - High-Definition Visual Fidelity:
+     Student client switches into Mode 3 (up to 1080p, HighQualityBicubic downsampling, Quality 85% JPEG) streaming live every ~1s. Small text, code, math formulas, and diagrams remain razor-sharp.
+   - Smartboard-Optimized True Fullscreen (F11):
+     Borderless full-screen mode covers 100% of the display or smartboard. Double-clicking the screen or pressing F11 toggles between fullscreen and windowed mode.
+   - Freeze Frame Mode (Space):
+     Click '⏸ Freeze' or press Space to freeze the frame on the smartboard. The teacher can pause to explain a concept while the student continues working.
+   - Fast Student Switching (Switch PC ▾):
+     Switch between different students' screens directly from the smartboard without walking back to the teacher desk.
+   - Student Awareness:
+     The student terminal displays a live '📺 REVERSE SHARING' status banner so the student knows their work is being presented to the class.
+
+8. LAB PROFILE MIGRATION & BACKUP (MULTI-TEACHER & SMARTBOARD TRANSFER)
+   - Zero-USB Lab Transfer:
+     Never walk around the room repairing 30 computers when switching to another laptop or smartboard!
+   - 1-Click Export Profile (`.vpbak`):
+     Exports the teacher TLS security certificate, private key, and all computer pairings into a single AES-GCM encrypted file protected by the Teacher Password.
+   - 1-Click Import Profile:
+     On a new laptop or smartboard, click '📥 Import Profile' (or 'Restore from backup file' on first run), enter your password, and all 30 student computers connect automatically within seconds!
+   - Cryptographic Integrity:
+     PBKDF2 (210,000 rounds) + AES-256-GCM authentication prevents unauthorized access or tampering. Restored certificates preserve the exact SHA-256 fingerprint pinned on student PCs.
+
+9. REMOTE CONTROL & LIVE TEACHER ASSISTANCE
+   - 1-Click Interactive Remote Assistance:
+     Select any online student computer and click '🎮 Remote Control' in the toolbar, or click '🎮 Remote Control' from inside the Reverse Share or Screen Viewer windows to directly operate the student computer.
+   - Zero Extra Ports (Reuses Secure TLS Port 8766):
+     Remote mouse and keyboard events are securely delivered over the existing encrypted HTTPS channel via sub-10ms authenticated long-polling (`/input`). Zero complex firewall configurations or open VNC/RDP ports needed.
+   - Pixel-Accurate Coordinate Normalization:
+     Mouse events are scaled to normalized (0.0 to 1.0) desktop coordinates with automatic letterbox/pillarbox compensation. Clicking, double-clicking, and dragging on a 4K teacher smartboard translates to exact pixel coordinates on any student screen resolution.
+   - Full Mouse & Keyboard Interaction:
+     Supports left click, double click, right click, dragging, mouse wheel scrolling, typing text, and special keys (Enter, Backspace, Tab, Esc, Arrows, Delete).
+   - Live Student Awareness:
+     The student tray and status card clearly display '🎮 REMOTE ASSISTANCE' while active, keeping the student informed that the teacher is guiding them on their screen.
+   - Dual-Mode Smartboard Control:
+     Teachers can toggle Remote Control on or off at will while viewing high-definition Reverse Share, switching instantly between lecture presentation mode and hands-on 1-on-1 student assistance.
+
+============================================================
+INSTALLATION & UPGRADE INSTRUCTIONS
+============================================================
+1. On the Teacher Computer:
+   Run `Release\Vishwapremi-Teacher-Setup.exe`.
+   Open the teacher workspace and click "Allow lab connections" once if prompted.
+
+2. On Student Computers:
+   - Remote Upgrade:
+     In Teacher, ensure student PCs show "Connected", and click "🔄 Update Student Apps" to upgrade all computers silently over the network with zero USB hassle!
+   - Fresh Install:
+     Run `Release\Vishwapremi-Student-Setup.exe`.
+     Import the `.vplab` pairing file created from the Teacher app.

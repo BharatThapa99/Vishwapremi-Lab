@@ -1,0 +1,67 @@
+VISHWAPREMI LAB — VERSION 1.3
+Shree Vishwapremi Secondary School
+Arun 5, Yaku, Bhojpur
+Designed by Bharat Thapa
+
+============================================================
+WHAT IS NEW IN VERSION 1.3
+============================================================
+
+1. CLASSROOM POWER MANAGEMENT & WAKE-ON-LAN (NEW)
+   - "⚡ Power" Button in Teacher Dashboard:
+     Select any group of computers (or "Select online") and click "⚡ Power" to open the power control panel:
+     * 🛑 Shut Down Selected Computers:
+       Optionally warn students with a 15-second countdown notification on their screens so they can save their work, or shut down immediately (0s).
+     * 🔄 Restart Selected Computers:
+       Reboots computers in 5 seconds with an on-screen student notification. Useful after installing software or fixing student glitches.
+     * 👤 Log Off Current Users:
+       Signs out the current student Windows account without turning off the computer, ready for the next period.
+     * 💤 Sleep / Suspend:
+       Puts computers into low-power sleep (standby) mode between morning and afternoon classes to conserve school electricity.
+     * ⚡ Wake-on-LAN (Turn On Sleeping/Off PCs):
+       Sends industry-standard AMD Magic Packets over UDP broadcast (ports 9 and 7) across all local network subnets to wake up and power on sleeping or turned-off computers remotely. Teachers no longer need to walk around the room pressing 30 physical power buttons every morning!
+     * ❌ Cancel / Abort Pending Shutdown:
+       Cancels any pending shutdown timer if clicked within the countdown window.
+   - Power Controls in Live Screen Monitor:
+     * Every student thumbnail card features a quick "⚡" power button with a dropdown menu (Restart, Shut Down 15s/0s, Log Off, Sleep, Wake-on-LAN, Cancel Shutdown).
+     * The Full-Screen live viewer also includes a dedicated "⚡ Power" button in its toolbar so you can restart or power off a computer while viewing its screen live.
+   - Instant Execution Feedback:
+     Before initiating shutdown, restart, logoff, or sleep, the student app sends an immediate status acknowledgment back to the teacher so the activity log confirms "Shutting down in 15s" or "Restarting in 5s".
+
+2. FILE SHARING (NO USB DRIVE NEEDED)
+   - Click "📁 Share File" in the Teacher actions bar to distribute any file (PDFs, assignments, code files, images, documents) directly to all selected student computers.
+   - Files are downloaded over pinned TLS and saved directly to the student's Desktop in a clean "Vishwapremi Files" folder.
+   - Optional Auto-Open: Teacher can choose to automatically launch the file on student screens immediately upon receipt.
+   - A friendly Windows notification balloon alerts students when a new file has arrived.
+
+3. REMOTE SILENT AUTO-UPDATING (ZERO-TOUCH STUDENT UPGRADES)
+   - Click "🔄 Update Student Apps" in the Teacher toolbar to deploy a new version of the Student software to all online lab computers in seconds.
+   - The teacher app stages the installer (`Vishwapremi-Student-Setup.exe`), calculates its SHA-256 cryptographic checksum, and streams it to student PCs.
+   - Students verify the SHA-256 hash to guarantee file integrity, run the Inno Setup installer silently in the background (`/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS`), and relaunch the upgraded student client with elevated permissions.
+   - Eliminates the need to walk around the classroom with USB drives whenever a new version is released!
+
+4. LIVE CLASSROOM SCREEN MONITORING (v1.2)
+   - Click "🖥️ Live Screens" in the Teacher toolbar to view live thumbnails of all student screens in real time.
+   - Double-click any computer to enter Full-Screen Live View (720p/1080p stream at 1.5s interval).
+   - "Save Screenshot" button in full view to capture timestamped screenshots of student work.
+   - Zero-overhead bandwidth optimization: screens only capture and stream when the monitor window is open.
+
+5. INTERNET CONTROL & WEBSITE FILTERING (v1.2)
+   - "Block Internet" kill switch disables all outbound internet traffic via Windows Firewall while maintaining teacher connectivity.
+   - "Unblock Internet" restores full internet access instantly.
+   - "Filter Websites" provides domain-level blacklisting (hosts file) and whitelisting (DNS + firewall).
+   - 10-minute auto-unblock watchdog failsafe ensures students are never permanently blocked if the teacher disconnects.
+
+============================================================
+INSTALLATION & UPGRADE INSTRUCTIONS
+============================================================
+1. On the Teacher Computer:
+   Run `Release\Vishwapremi-Teacher-Setup.exe`.
+   Once installed, open the teacher app and click "Allow lab connections" once if prompted.
+
+2. On Student Computers:
+   - If already running Version 1.2+:
+     Open the Teacher app, ensure student PCs show "Connected", and click "🔄 Update Student Apps" to upgrade all computers silently over the network with no USB drive needed!
+   - For fresh installs:
+     Run `Release\Vishwapremi-Student-Setup.exe`.
+     Import the pairing file (`.vplab`) created from the Teacher app.

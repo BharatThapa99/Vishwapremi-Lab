@@ -1,0 +1,31 @@
+VISHWAPREMI LAB — CONNECTION FIX 1.1
+Shree Vishwapremi Secondary School
+Arun 5, Yaku, Bhojpur
+Designed by Bharat Thapa
+
+WHAT WAS WRONG
+The first release allowed incoming connections only when Windows classified the teacher's network as Private. School Wi-Fi is often classified as Public, so Windows Firewall could silently block the student even though both computers were on the same router. The teacher address list also included inactive or virtual network adapters.
+
+WHAT VERSION 1.1 CHANGES
+- Firewall rules now work on Public and Private network profiles, but remain limited to the local subnet.
+- The student automatically discovers the correct teacher computer and verifies its secure identity from the pairing file.
+- Only active teacher network adapters appear in Add computer.
+- If the teacher's local IP later changes, paired students search for the same teacher and update the saved address.
+- Connection error messages now explain the address attempted and the likely next action.
+
+HOW TO UPDATE AND TEST
+1. Exit Vishwapremi Teacher from its notification-area icon.
+2. Run the new Vishwapremi-Teacher-Setup.exe. It upgrades the existing installation and keeps the teacher data.
+3. Open Teacher and click Allow lab connections. Approve the Windows administrator prompt once.
+4. On the student PC, exit Vishwapremi Student from its notification-area icon.
+5. Run the new Vishwapremi-Student-Setup.exe.
+6. In Teacher, select and remove the old pending LAB entry. Click Add computer and make one fresh pairing file.
+7. Import that one file in Student. Do not create or try three IP-specific files; version 1.1 searches automatically.
+
+If it still cannot find the teacher, open the router settings and look for AP isolation, client isolation, wireless isolation, or guest-network isolation. Disable that feature for the school lab network. A router with client isolation intentionally prevents two devices from communicating even while both show the same Wi-Fi name.
+
+Ports used only inside the local network:
+- UDP 8765: automatic teacher discovery
+- TCP 8766: encrypted teacher/student connection
+
+Do not forward either port to the internet.

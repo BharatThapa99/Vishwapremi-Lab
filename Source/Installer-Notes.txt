@@ -1,0 +1,15 @@
+SHREE VISHWAPREMI SECONDARY SCHOOL
+Arun 5, Yaku, Bhojpur
+Designed by Bharat Thapa
+
+Install Teacher on one teacher computer. Install Student on each lab computer, while signed in to the Windows account students normally use.
+
+The installer includes the .NET runtime. No programming tools, terminal commands, or separate runtime downloads are needed on school computers.
+
+After installation, click Allow lab connections in the Teacher app once and approve the administrator request. The teacher then creates one pairing file for each PC. Import that file in its Student app; version 1.1 finds the correct teacher address automatically.
+
+This release supports notices, opening lesson websites, connection status, and Windows session locking. It does not yet provide website filtering, game blocking, screen viewing, or a tamper-resistant student service.
+
+Windows 10 22H2 or Windows 11, 64-bit. Installation and pairing are per Windows account. Automatic startup happens at sign-in, not before sign-in. The teacher computer must remain powered on and signed in.
+
+Use the setup guide from the Start menu for the full walkthrough.

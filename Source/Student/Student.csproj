@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework><UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AssemblyName>Vishwapremi.Student</AssemblyName>
+    <ApplicationManifest>../Shared/app.manifest</ApplicationManifest>
+    <PublishSingleFile>true</PublishSingleFile><SelfContained>true</SelfContained><IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <DebugType>none</DebugType><EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <Company>Shree Vishwapremi Secondary School</Company><Product>Vishwapremi Lab Student</Product><Version>1.1.0</Version>
+  </PropertyGroup>
+  <ItemGroup><Compile Include="../Shared/*.cs" Link="Shared/%(Filename)%(Extension)"/></ItemGroup>
+</Project>

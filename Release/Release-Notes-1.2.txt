@@ -1,0 +1,49 @@
+VISHWAPREMI LAB — VERSION 1.2
+Shree Vishwapremi Secondary School
+Arun 5, Yaku, Bhojpur
+Designed by Bharat Thapa
+
+WHAT IS NEW IN VERSION 1.2
+
+1. UNBLOCK INTERNET & SAFETY PROTECTIONS (NEW)
+   - Renamed "Allow Internet" to "Unblock Internet" across the Teacher dashboard.
+   - Quick "🌐 Unblock" button right on every computer card in the Live Screen Monitor window.
+   - "Unblock Net" button added directly inside the Full-Screen live screen viewer.
+   - On Student computers:
+     * "Restore / Unblock Internet" button directly in the student window.
+     * "Unblock Internet (Emergency)" option right in the Windows system tray right-click menu.
+     * Auto-Unblock Failsafe: If the student computer is blocked and the teacher computer remains disconnected for more than 10 minutes (e.g. teacher computer turned off or school day ends), the student app automatically unblocks the internet and clears firewall blocks so students are NEVER permanently locked out.
+     * Normal exit or uninstallation of the student app also automatically unblocks the internet.
+
+2. LIVE CLASSROOM SCREEN MONITORING
+   - Click the green "🖥️ Live Screens" button in the Teacher toolbar to open the Live Screen Monitor window.
+   - Live thumbnails of all student screens are displayed in a responsive grid.
+   - Double-click any computer's screen thumbnail (or click "🔍 View") to open a high-resolution live viewer for that specific student.
+   - In full-view mode, frames stream in high resolution (720p/1080p) every 1.5s so you can clearly see what the student is typing and browsing.
+   - Includes a "Save Screenshot" button in Full View to save proof/evidence directly to your teacher computer.
+   - Quick action buttons (View, Lock, Notice, Unblock Net) directly on each thumbnail card.
+   - Smart Bandwidth Optimization: Student computers ONLY capture and transmit screen images when the teacher has the Live Screens window open. When closed, screen capture is 100% idle (0% CPU, 0 bandwidth).
+
+3. INTERNET KILL SWITCH
+   - Teachers can select student computers and click "Block Internet".
+   - All outbound web traffic is immediately blocked via Windows Firewall.
+   - The teacher connection (HTTPS TCP 8766), local network discovery, loopback, and DHCP remain active.
+   - Click "Unblock Internet" to restore normal full internet access at any time.
+
+4. WEBSITE FILTERING (BLACKLIST & WHITELIST)
+   - Click "Filter Websites" in Teacher to open the domain list dialog.
+   - Blacklist: Enter domains to block (e.g. youtube.com, facebook.com, tiktok.com).
+     These domains and their www subdomains are redirected to 127.0.0.1 via the hosts file.
+   - Whitelist: Enter domains to exclusively allow (e.g. wikipedia.org, khanacademy.org).
+     Outbound traffic is locked down, allowing only DNS and the whitelisted websites.
+   - Click "Clear Filters" to remove all blacklist and whitelist restrictions.
+
+5. OPTION A: ELEVATED PRIVILEGES VIA TASK SCHEDULER
+   - Windows Firewall rules and hosts file modifications require administrator privileges.
+   - Automatically registers a Windows Scheduled Task ("VishwapremiStudent") configured with Highest Privileges on install.
+   - Student app auto-starts elevated at logon without showing UAC popups to students.
+   - An "Enable administrator control…" button appears in the Student UI if not yet running elevated.
+
+HOW TO UPDATE
+1. On the Teacher PC: Run Release\Vishwapremi-Teacher-Setup.exe to upgrade.
+2. On each Student PC: Run Release\Vishwapremi-Student-Setup.exe to upgrade.

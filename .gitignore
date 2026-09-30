@@ -1,0 +1,21 @@
+# Build and publish outputs
+**/bin/
+**/obj/
+**/publish/
+**/installers/
+**/test-data/
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Release executables & archives (reproducible via Source\Build.ps1)
+Release/*.exe
+Release/*.zip
+
+# Logs
+*.log
