@@ -30,15 +30,11 @@ internal sealed class TeacherForm : Form
         Controls.Add(webView);
         Controls.Add(root);
         
-        var header=new TableLayoutPanel {Dock=DockStyle.Fill,BackColor=Desktop.Green,ColumnCount=2,RowCount=1,Padding=new Padding(20,12,20,12)};
-        header.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,70));header.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,30));
+        var header=new TableLayoutPanel {Dock=DockStyle.Fill,BackColor=Desktop.Green,ColumnCount=1,RowCount=1,Padding=new Padding(20,12,20,12)};
         var schoolInfo=new Panel{Dock=DockStyle.Fill};
         var school=new Label {Text="SHREE VISHWAPREMI SECONDARY SCHOOL",Dock=DockStyle.Top,AutoSize=true,ForeColor=Color.White,Font=new Font("Segoe UI",17,FontStyle.Bold)};
         var address=new Label {Text="Arun 5, Yaku, Bhojpur  •  Computer Lab Management Workspace",Dock=DockStyle.Bottom,Height=22,ForeColor=Color.FromArgb(208,225,211),Font=new Font("Segoe UI",9.5f)};
-        schoolInfo.Controls.Add(school);schoolInfo.Controls.Add(address);header.Controls.Add(schoolInfo,0,0);
-        var headerRight=new FlowLayoutPanel{Dock=DockStyle.Fill,FlowDirection=FlowDirection.RightToLeft,Padding=new Padding(0,6,0,0)};
-        var statusBadge=new Label{Text="● CONTROLLER ACTIVE",ForeColor=Color.FromArgb(220,245,225),BackColor=Color.FromArgb(38,98,72),Font=new Font("Segoe UI",9,FontStyle.Bold),Padding=new Padding(12,6,12,6),AutoSize=true};
-        headerRight.Controls.Add(statusBadge);header.Controls.Add(headerRight,1,0);root.Controls.Add(header,0,0);
+        schoolInfo.Controls.Add(school);schoolInfo.Controls.Add(address);header.Controls.Add(schoolInfo,0,0);root.Controls.Add(header,0,0);
 
         var tools=new FlowLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(0,4,0,0)};
         tools.Controls.Add(Desktop.Button("Modern Teams UI",(_,_)=>SwitchUi(true),true));

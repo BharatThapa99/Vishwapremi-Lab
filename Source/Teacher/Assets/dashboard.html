@@ -386,10 +386,6 @@
     </div>
 
     <div class="header-center">
-      <div class="status-pill" id="controllerPill">
-        <div class="pulse-dot"></div>
-        <span id="controllerStatus">Controller Active</span>
-      </div>
       <div class="stats-counter" id="statsCounter">
         <strong id="onlineCount">0</strong> / <span id="totalCount">0</span> Online
       </div>
@@ -755,19 +751,6 @@
       const onlineCount = labState.devices.filter(d => d.online).length;
       document.getElementById('onlineCount').textContent = onlineCount;
       document.getElementById('totalCount').textContent = labState.devices.length;
-
-      // Status pill
-      const pill = document.getElementById('controllerPill');
-      const pillText = document.getElementById('controllerStatus');
-      if (labState.controllerActive) {
-        pill.style.background = 'var(--emerald-light)';
-        pill.style.color = 'var(--emerald)';
-        pillText.textContent = 'Controller Active';
-      } else {
-        pill.style.background = 'var(--rose-light)';
-        pill.style.color = 'var(--rose)';
-        pillText.textContent = 'Controller Offline';
-      }
 
       // Filter devices
       const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
