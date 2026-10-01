@@ -98,7 +98,7 @@ internal sealed class StudentForm : Form
         var infoLabel = new Label { Text = $"Computer: {Environment.MachineName}    •    Windows User: {Environment.UserName}", ForeColor = Desktop.Ink, Font = new Font("Segoe UI", 9.5f), AutoSize = true, Margin = new Padding(0, 0, 0, 4) };
         card1Layout.Controls.Add(infoLabel);
 
-        elevationLabel.Text = elevated ? "🛡️ Administrator Privileges Active (Internet Control Enabled)" : "⚠️ Standard User Session (Click 'Enable Admin Control' below)";
+        elevationLabel.Text = elevated ? "Administrator Privileges Active (Internet Control Enabled)" : "Standard User Session (Click 'Enable Admin Control' below)";
         elevationLabel.ForeColor = elevated ? Desktop.OnlineGreen : Desktop.Amber;
         elevationLabel.AutoSize = true;
         elevationLabel.Margin = new Padding(0, 0, 0, 6);
@@ -119,14 +119,14 @@ internal sealed class StudentForm : Form
         card2Layout.Controls.Add(new Label { Text = "STUDENT TOOLS & CONTROLS", ForeColor = Desktop.Muted, Font = new Font("Segoe UI", 8.5f, FontStyle.Bold), AutoSize = true, Margin = new Padding(0, 0, 0, 8) });
 
         var actionsFlow = new FlowLayoutPanel { AutoSize = true, WrapContents = true, MaximumSize = new Size(560, 0) };
-        actionsFlow.Controls.Add(Desktop.Button("📁 Open Received Files", (_, _) =>
+        actionsFlow.Controls.Add(Desktop.Button("Open Received Files", (_, _) =>
         {
             var destFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "Vishwapremi Files");
             Directory.CreateDirectory(destFolder);
             Desktop.Open(destFolder);
         }));
 
-        actionsFlow.Controls.Add(Desktop.Button("🌐 Restore / Unblock Internet", (_, _) =>
+        actionsFlow.Controls.Add(Desktop.Button("Restore / Unblock Internet", (_, _) =>
         {
             if (elevated)
             {
@@ -141,7 +141,7 @@ internal sealed class StudentForm : Form
 
         if (!elevated)
         {
-            var elevateBtn = Desktop.Button("🛡️ Enable Admin Control…", (_, _) =>
+            var elevateBtn = Desktop.Button("Enable Admin Control…", (_, _) =>
             {
                 try
                 {
@@ -302,7 +302,7 @@ internal sealed class StudentForm : Form
             connectionFailures=0;
             if(result.RemoteControl)
             {
-                SetStatus("🎮 REMOTE ASSISTANCE", Color.FromArgb(24, 76, 56), Color.FromArgb(220, 245, 225), "Teacher is providing live remote assistance.", Desktop.OnlineGreen);
+                SetStatus("● REMOTE ASSISTANCE", Color.FromArgb(24, 76, 56), Color.FromArgb(220, 245, 225), "Teacher is providing live remote assistance.", Desktop.OnlineGreen);
                 tray.Text = "Vishwapremi Student · Remote Assistance Active";
                 EnsureInputLoop();
             }
@@ -311,7 +311,7 @@ internal sealed class StudentForm : Form
                 StopInputLoop();
                 if(result.ScreenMode == 3)
                 {
-                    SetStatus("📺 REVERSE SHARING", Color.FromArgb(24, 76, 56), Color.FromArgb(220, 245, 225), "Your screen is sharing live to teacher monitor / smartboard.", Desktop.OnlineGreen);
+                    SetStatus("● REVERSE SHARING", Color.FromArgb(24, 76, 56), Color.FromArgb(220, 245, 225), "Your screen is sharing live to teacher monitor / smartboard.", Desktop.OnlineGreen);
                     tray.Text = "Vishwapremi Student · Presenting Screen to Teacher";
                 }
                 else

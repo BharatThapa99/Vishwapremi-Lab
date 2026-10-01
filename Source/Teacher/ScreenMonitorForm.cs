@@ -7,7 +7,7 @@ internal sealed class ScreenMonitorForm : Form
     private readonly LabStore store;
     private readonly FlowLayoutPanel cardsPanel = new() { Dock = DockStyle.Fill, AutoScroll = true, WrapContents = true, Padding = new Padding(16), BackColor = Desktop.Paper };
     private readonly Label statusLabel = Desktop.Label("Streaming active · Updates every 2–3s", 10.5f);
-    private readonly TextBox searchBox = new() { Width = 180, Font = new Font("Segoe UI", 9.5f), PlaceholderText = "🔍 Search PC name…" };
+    private readonly TextBox searchBox = new() { Width = 180, Font = new Font("Segoe UI", 9.5f), PlaceholderText = "Search PC name…" };
     private readonly System.Windows.Forms.Timer refreshTimer = new() { Interval = 2000 };
     private readonly Dictionary<string, (PictureBox Picture, Label Status, Label Info, Panel Card)> cardMap = new();
     private bool paused = false;
@@ -129,19 +129,19 @@ internal sealed class ScreenMonitorForm : Form
             pic.DoubleClick += (_, _) => OpenFullView(d);
 
             var bottomBar = new Panel { Dock = DockStyle.Bottom, Height = 38, BackColor = Color.FromArgb(246, 248, 245), Padding = new Padding(6, 4, 6, 4) };
-            var viewBtn = MiniButton("🔍 View", (_, _) => OpenFullView(d), 66);
+            var viewBtn = MiniButton("View", (_, _) => OpenFullView(d), 56);
             viewBtn.Location = new Point(4, 5);
 
-            var lockBtn = MiniButton("🔒 Lock", (_, _) =>
+            var lockBtn = MiniButton("Lock", (_, _) =>
             {
                 if (MessageBox.Show($"Lock Windows session on {d.Name}?", "Lock Computer", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                 {
                     store.Queue([d.Id], "lock", "");
                 }
             }, 56);
-            lockBtn.Location = new Point(74, 5);
+            lockBtn.Location = new Point(64, 5);
 
-            var msgBtn = MiniButton("💬 Notice", (_, _) =>
+            var msgBtn = MiniButton("Notice", (_, _) =>
             {
                 using var f = Desktop.Dialog($"Send notice to {d.Name}", 320);
                 var p = Desktop.Stack(); f.Controls.Add(p);
@@ -154,26 +154,26 @@ internal sealed class ScreenMonitorForm : Form
                     catch (Exception ex) { Desktop.Error(ex); }
                 }, true));
                 if (f.ShowDialog(this) == DialogResult.OK) store.Queue([d.Id], "message", input.Text.Trim());
-            }, 66);
-            msgBtn.Location = new Point(134, 5);
+            }, 64);
+            msgBtn.Location = new Point(124, 5);
 
-            var unblockBtn = MiniButton("🌐 Unblock", (_, _) =>
+            var unblockBtn = MiniButton("Unblock", (_, _) =>
             {
                 store.Queue([d.Id], "unblock-internet", "");
                 MessageBox.Show($"Unblock Internet command sent to {d.Name}.", "Unblock Internet", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }, 74);
-            unblockBtn.Location = new Point(204, 5);
+            }, 68);
+            unblockBtn.Location = new Point(192, 5);
 
-            var powerBtn = MiniButton("⚡", null, 36);
-            powerBtn.Location = new Point(282, 5);
+            var powerBtn = MiniButton("Power", null, 56);
+            powerBtn.Location = new Point(264, 5);
             var pMenu = new ContextMenuStrip();
-            pMenu.Items.Add("🔄 Restart (5s)", null, (_, _) => { if (MessageBox.Show($"Restart {d.Name} in 5s?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([d.Id], "restart", "5"); });
-            pMenu.Items.Add("🛑 Shut Down (15s)", null, (_, _) => { if (MessageBox.Show($"Shut down {d.Name} with 15s warning?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([d.Id], "shutdown", "15"); });
-            pMenu.Items.Add("🛑 Shut Down (0s)", null, (_, _) => { if (MessageBox.Show($"Shut down {d.Name} immediately?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([d.Id], "shutdown", "0"); });
-            pMenu.Items.Add("👤 Log Off User", null, (_, _) => { if (MessageBox.Show($"Log off student session on {d.Name}?", "Log Off", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([d.Id], "logoff", ""); });
-            pMenu.Items.Add("💤 Sleep", null, (_, _) => { if (MessageBox.Show($"Put {d.Name} into sleep mode?", "Sleep", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([d.Id], "sleep", ""); });
-            if (!string.IsNullOrEmpty(d.Mac)) pMenu.Items.Add("⚡ Wake-on-LAN", null, (_, _) => { NetworkSetup.SendWakeOnLan(d.Mac); MessageBox.Show($"Sent Wake-on-LAN packet to {d.Name}.", "Wake-on-LAN"); });
-            pMenu.Items.Add("❌ Cancel Shutdown", null, (_, _) => { store.Queue([d.Id], "abort-shutdown", ""); MessageBox.Show($"Cancelled shutdown on {d.Name}.", "Abort Shutdown"); });
+            pMenu.Items.Add("Restart (5s)", null, (_, _) => { if (MessageBox.Show($"Restart {d.Name} in 5s?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([d.Id], "restart", "5"); });
+            pMenu.Items.Add("Shut Down (15s)", null, (_, _) => { if (MessageBox.Show($"Shut down {d.Name} with 15s warning?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([d.Id], "shutdown", "15"); });
+            pMenu.Items.Add("Shut Down (0s)", null, (_, _) => { if (MessageBox.Show($"Shut down {d.Name} immediately?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([d.Id], "shutdown", "0"); });
+            pMenu.Items.Add("Log Off User", null, (_, _) => { if (MessageBox.Show($"Log off student session on {d.Name}?", "Log Off", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([d.Id], "logoff", ""); });
+            pMenu.Items.Add("Sleep", null, (_, _) => { if (MessageBox.Show($"Put {d.Name} into sleep mode?", "Sleep", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([d.Id], "sleep", ""); });
+            if (!string.IsNullOrEmpty(d.Mac)) pMenu.Items.Add("Wake-on-LAN", null, (_, _) => { NetworkSetup.SendWakeOnLan(d.Mac); MessageBox.Show($"Sent Wake-on-LAN packet to {d.Name}.", "Wake-on-LAN"); });
+            pMenu.Items.Add("Cancel Shutdown", null, (_, _) => { store.Queue([d.Id], "abort-shutdown", ""); MessageBox.Show($"Cancelled shutdown on {d.Name}.", "Abort Shutdown"); });
             powerBtn.Click += (_, _) => pMenu.Show(powerBtn, new Point(0, powerBtn.Height));
 
             bottomBar.Controls.Add(viewBtn);
@@ -259,31 +259,31 @@ internal sealed class FullScreenViewerForm : Form
         AutoScaleMode = AutoScaleMode.Dpi;
 
         var topBar = new Panel { Dock = DockStyle.Top, Height = 56, BackColor = Desktop.Green, Padding = new Padding(14, 10, 14, 10) };
-        infoLabel.Text = $"🔴 LIVE: {device.Name}  ({(string.IsNullOrEmpty(device.User) ? "Student" : device.User)})";
+        infoLabel.Text = $"LIVE: {device.Name}  ({(string.IsNullOrEmpty(device.User) ? "Student" : device.User)})";
         infoLabel.Location = new Point(16, 16);
         topBar.Controls.Add(infoLabel);
 
         var tools = new FlowLayoutPanel { Dock = DockStyle.Right, Width = 880, FlowDirection = FlowDirection.RightToLeft, Padding = new Padding(0, 9, 8, 0), BackColor = Color.Transparent };
         var closeBtn = Desktop.Button("Back to Grid", (_, _) => Close(), true);
-        var reverseBtn = Desktop.Button("📺 Reverse Share", (_, _) =>
+        var reverseBtn = Desktop.Button("Reverse Share", (_, _) =>
         {
             using var f = new ReverseShareForm(device, store);
             f.ShowDialog(this);
         }, true);
-        var controlBtn = Desktop.Button("🎮 Remote Control", (_, _) =>
+        var controlBtn = Desktop.Button("Remote Control", (_, _) =>
         {
             using var f = new ReverseShareForm(device, store, startRemoteControl: true);
             f.ShowDialog(this);
         }, true);
         var saveBtn = Desktop.Button("Save Screenshot", (_, _) => SaveScreenshot());
-        var powerBtn = Desktop.Button("⚡ Power", null!);
+        var powerBtn = Desktop.Button("Power", null!);
         var fsPowerMenu = new ContextMenuStrip();
-        fsPowerMenu.Items.Add("🔄 Restart (5s)", null, (_, _) => { if (MessageBox.Show($"Restart {device.Name} in 5s?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "restart", "5"); });
-        fsPowerMenu.Items.Add("🛑 Shut Down (15s)", null, (_, _) => { if (MessageBox.Show($"Shut down {device.Name} with 15s countdown?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "shutdown", "15"); });
-        fsPowerMenu.Items.Add("🛑 Shut Down Immediately (0s)", null, (_, _) => { if (MessageBox.Show($"Shut down {device.Name} immediately?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "shutdown", "0"); });
-        fsPowerMenu.Items.Add("👤 Log Off User", null, (_, _) => { if (MessageBox.Show($"Log off student session on {device.Name}?", "Log Off", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "logoff", ""); });
-        fsPowerMenu.Items.Add("💤 Sleep", null, (_, _) => { if (MessageBox.Show($"Put {device.Name} into sleep mode?", "Sleep", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "sleep", ""); });
-        fsPowerMenu.Items.Add("❌ Cancel Shutdown", null, (_, _) => { store.Queue([device.Id], "abort-shutdown", ""); MessageBox.Show($"Cancelled shutdown on {device.Name}.", "Abort Shutdown"); });
+        fsPowerMenu.Items.Add("Restart (5s)", null, (_, _) => { if (MessageBox.Show($"Restart {device.Name} in 5s?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "restart", "5"); });
+        fsPowerMenu.Items.Add("Shut Down (15s)", null, (_, _) => { if (MessageBox.Show($"Shut down {device.Name} with 15s countdown?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "shutdown", "15"); });
+        fsPowerMenu.Items.Add("Shut Down Immediately (0s)", null, (_, _) => { if (MessageBox.Show($"Shut down {device.Name} immediately?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "shutdown", "0"); });
+        fsPowerMenu.Items.Add("Log Off User", null, (_, _) => { if (MessageBox.Show($"Log off student session on {device.Name}?", "Log Off", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "logoff", ""); });
+        fsPowerMenu.Items.Add("Sleep", null, (_, _) => { if (MessageBox.Show($"Put {device.Name} into sleep mode?", "Sleep", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "sleep", ""); });
+        fsPowerMenu.Items.Add("Cancel Shutdown", null, (_, _) => { store.Queue([device.Id], "abort-shutdown", ""); MessageBox.Show($"Cancelled shutdown on {device.Name}.", "Abort Shutdown"); });
         powerBtn.Click += (_, _) => fsPowerMenu.Show(powerBtn, new Point(0, powerBtn.Height));
         var unblockBtn = Desktop.Button("Unblock Net", (_, _) =>
         {
@@ -363,7 +363,7 @@ internal sealed class FullScreenViewerForm : Form
                 pictureBox.Image = newImg;
                 oldImg?.Dispose();
                 var time = ScreenStore.GetUpdated(device.Id)?.ToLocalTime().ToLongTimeString() ?? "";
-                infoLabel.Text = $"🔴 LIVE: {device.Name}  ({device.User})  ·  Updated {time}";
+                infoLabel.Text = $"LIVE: {device.Name}  ({device.User})  ·  Updated {time}";
             }
             catch { }
         }

@@ -8,8 +8,8 @@ internal sealed class ReverseShareForm : Form
     private readonly LabStore store;
     private readonly PictureBox pictureBox = new() { Dock = DockStyle.Fill, SizeMode = PictureBoxSizeMode.Zoom, BackColor = Color.FromArgb(16, 20, 18) };
     private readonly Label liveBadge = new() { Text = "● LIVE PROJECTION", ForeColor = Color.White, BackColor = Color.FromArgb(200, 38, 38), Font = new Font("Segoe UI", 9, FontStyle.Bold), Padding = new Padding(8, 4, 8, 4), AutoSize = true, Location = new Point(14, 12) };
-    private readonly Label freezeBadge = new() { Text = "❄️ FREEZE ACTIVE", ForeColor = Color.Black, BackColor = Color.FromArgb(100, 220, 240), Font = new Font("Segoe UI", 9, FontStyle.Bold), Padding = new Padding(8, 4, 8, 4), AutoSize = true, Visible = false, Location = new Point(14, 12) };
-    private readonly Label controlBadge = new() { Text = "🎮 CONTROL ACTIVE", ForeColor = Color.Black, BackColor = Color.FromArgb(130, 240, 130), Font = new Font("Segoe UI", 9, FontStyle.Bold), Padding = new Padding(8, 4, 8, 4), AutoSize = true, Visible = false, Location = new Point(14, 12) };
+    private readonly Label freezeBadge = new() { Text = "FREEZE ACTIVE", ForeColor = Color.Black, BackColor = Color.FromArgb(100, 220, 240), Font = new Font("Segoe UI", 9, FontStyle.Bold), Padding = new Padding(8, 4, 8, 4), AutoSize = true, Visible = false, Location = new Point(14, 12) };
+    private readonly Label controlBadge = new() { Text = "CONTROL ACTIVE", ForeColor = Color.Black, BackColor = Color.FromArgb(130, 240, 130), Font = new Font("Segoe UI", 9, FontStyle.Bold), Padding = new Padding(8, 4, 8, 4), AutoSize = true, Visible = false, Location = new Point(14, 12) };
     private readonly Label titleLabel = new() { ForeColor = Color.White, Font = new Font("Segoe UI", 12.5f, FontStyle.Bold), AutoSize = true, Location = new Point(175, 10) };
     private readonly Label infoLabel = new() { ForeColor = Color.FromArgb(208, 225, 211), Font = new Font("Segoe UI", 9f), AutoSize = true, Location = new Point(175, 32) };
     private readonly Button freezeBtn;
@@ -46,21 +46,21 @@ internal sealed class ReverseShareForm : Form
 
         var tools = new FlowLayoutPanel { Dock = DockStyle.Right, Width = 840, FlowDirection = FlowDirection.RightToLeft, Padding = new Padding(0, 10, 8, 0), BackColor = Color.Transparent };
 
-        var stopBtn = Desktop.Button("⏹ Stop", (_, _) => Close(), true);
+        var stopBtn = Desktop.Button("Stop", (_, _) => Close(), true);
         stopBtn.BackColor = Color.FromArgb(180, 40, 40);
         stopBtn.FlatAppearance.BorderColor = Color.FromArgb(220, 50, 50);
         stopBtn.FlatAppearance.MouseOverBackColor = Color.FromArgb(200, 45, 45);
 
-        fullscreenBtn = Desktop.Button("🔲 Fullscreen (F11)", (_, _) => ToggleFullscreen());
-        remoteBtn = Desktop.Button("🎮 Remote Control", (_, _) => ToggleRemoteControl());
-        freezeBtn = Desktop.Button("⏸ Freeze", (_, _) => ToggleFreeze());
+        fullscreenBtn = Desktop.Button("Fullscreen (F11)", (_, _) => ToggleFullscreen());
+        remoteBtn = Desktop.Button("Remote Control", (_, _) => ToggleRemoteControl());
+        freezeBtn = Desktop.Button("Freeze", (_, _) => ToggleFreeze());
 
-        var switchBtn = Desktop.Button("🔄 Switch PC ▾", null!);
+        var switchBtn = Desktop.Button("Switch PC ▾", null!);
         switchBtn.Click += (_, _) => ShowSwitchMenu(switchBtn);
 
-        var saveBtn = Desktop.Button("📸 Save", (_, _) => SaveScreenshot());
+        var saveBtn = Desktop.Button("Save", (_, _) => SaveScreenshot());
 
-        var lockBtn = Desktop.Button("🔒 Lock", (_, _) =>
+        var lockBtn = Desktop.Button("Lock", (_, _) =>
         {
             if (MessageBox.Show($"Lock Windows session on {device.Name}?", "Lock Computer", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
             {
@@ -68,14 +68,14 @@ internal sealed class ReverseShareForm : Form
             }
         });
 
-        var powerBtn = Desktop.Button("⚡ Power ▾", null!);
+        var powerBtn = Desktop.Button("Power ▾", null!);
         var powerMenu = new ContextMenuStrip();
-        powerMenu.Items.Add("🔄 Restart (5s)", null, (_, _) => { if (MessageBox.Show($"Restart {device.Name} in 5s?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "restart", "5"); });
-        powerMenu.Items.Add("🛑 Shut Down (15s)", null, (_, _) => { if (MessageBox.Show($"Shut down {device.Name} with 15s warning?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "shutdown", "15"); });
-        powerMenu.Items.Add("🛑 Shut Down (0s)", null, (_, _) => { if (MessageBox.Show($"Shut down {device.Name} immediately?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "shutdown", "0"); });
-        powerMenu.Items.Add("👤 Log Off User", null, (_, _) => { if (MessageBox.Show($"Log off student session on {device.Name}?", "Log Off", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "logoff", ""); });
-        powerMenu.Items.Add("💤 Sleep", null, (_, _) => { if (MessageBox.Show($"Put {device.Name} into sleep mode?", "Sleep", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "sleep", ""); });
-        powerMenu.Items.Add("❌ Cancel Shutdown", null, (_, _) => { store.Queue([device.Id], "abort-shutdown", ""); MessageBox.Show($"Cancelled shutdown on {device.Name}.", "Abort Shutdown"); });
+        powerMenu.Items.Add("Restart (5s)", null, (_, _) => { if (MessageBox.Show($"Restart {device.Name} in 5s?", "Restart", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "restart", "5"); });
+        powerMenu.Items.Add("Shut Down (15s)", null, (_, _) => { if (MessageBox.Show($"Shut down {device.Name} with 15s warning?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "shutdown", "15"); });
+        powerMenu.Items.Add("Shut Down (0s)", null, (_, _) => { if (MessageBox.Show($"Shut down {device.Name} immediately?", "Shut Down", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "shutdown", "0"); });
+        powerMenu.Items.Add("Log Off User", null, (_, _) => { if (MessageBox.Show($"Log off student session on {device.Name}?", "Log Off", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "logoff", ""); });
+        powerMenu.Items.Add("Sleep", null, (_, _) => { if (MessageBox.Show($"Put {device.Name} into sleep mode?", "Sleep", MessageBoxButtons.OKCancel) == DialogResult.OK) store.Queue([device.Id], "sleep", ""); });
+        powerMenu.Items.Add("Cancel Shutdown", null, (_, _) => { store.Queue([device.Id], "abort-shutdown", ""); MessageBox.Show($"Cancelled shutdown on {device.Name}.", "Abort Shutdown"); });
         powerBtn.Click += (_, _) => powerMenu.Show(powerBtn, new Point(0, powerBtn.Height));
 
         tools.Controls.Add(stopBtn);
@@ -178,7 +178,7 @@ internal sealed class ReverseShareForm : Form
         titleLabel.Text = $"{device.Name}  •  {(string.IsNullOrEmpty(device.User) ? "Student Session" : device.User)}";
         if (isRemoteControl)
         {
-            infoLabel.Text = $"🎮 REMOTE CONTROL ACTIVE  •  Click and type to control {device.Name}  •  Press Esc or click Control to exit";
+            infoLabel.Text = $"REMOTE CONTROL ACTIVE  •  Click and type to control {device.Name}  •  Press Esc or click Control to exit";
         }
         else
         {
@@ -193,7 +193,7 @@ internal sealed class ReverseShareForm : Form
         {
             if (isFrozen) ToggleFreeze();
             ScreenStore.RemoteControlDeviceId = device.Id;
-            remoteBtn.Text = "🎮 Control: ON";
+            remoteBtn.Text = "Control: ON";
             remoteBtn.BackColor = Color.FromArgb(34, 139, 34);
             remoteBtn.ForeColor = Color.White;
             controlBadge.Visible = true;
@@ -205,7 +205,7 @@ internal sealed class ReverseShareForm : Form
         {
             if (ScreenStore.RemoteControlDeviceId == device.Id) ScreenStore.RemoteControlDeviceId = "";
             InputStore.Clear(device.Id);
-            remoteBtn.Text = "🎮 Remote Control";
+            remoteBtn.Text = "Remote Control";
             remoteBtn.BackColor = Color.White;
             remoteBtn.ForeColor = Desktop.Ink;
             controlBadge.Visible = false;
@@ -301,7 +301,7 @@ internal sealed class ReverseShareForm : Form
             WindowState = FormWindowState.Normal;
             Bounds = Screen.FromControl(this).Bounds;
             isFullscreen = true;
-            fullscreenBtn.Text = "🗗 Windowed (F11)";
+            fullscreenBtn.Text = "Windowed (F11)";
         }
         else
         {
@@ -309,7 +309,7 @@ internal sealed class ReverseShareForm : Form
             WindowState = normalWindowState;
             Bounds = normalBounds;
             isFullscreen = false;
-            fullscreenBtn.Text = "🔲 Fullscreen (F11)";
+            fullscreenBtn.Text = "Fullscreen (F11)";
         }
     }
 
@@ -317,7 +317,7 @@ internal sealed class ReverseShareForm : Form
     {
         if (isRemoteControl) ToggleRemoteControl();
         isFrozen = !isFrozen;
-        freezeBtn.Text = isFrozen ? "▶️ Resume" : "⏸ Freeze";
+        freezeBtn.Text = isFrozen ? "Resume" : "Freeze";
         freezeBtn.BackColor = isFrozen ? Color.FromArgb(100, 220, 240) : Color.White;
         freezeBtn.ForeColor = isFrozen ? Color.Black : Desktop.Ink;
         freezeBadge.Visible = isFrozen;

@@ -1,2 +1,2 @@
-﻿3b7e3ae6bacdedb5d33623ff5d44e341c6a84f9fa899bb0c783669f8e7c4bb71  Vishwapremi-Teacher-Setup.exe
-5f29f2a5c71bd08768ec91c282e17a24d55e4db1f48fae5d36f9d498c366b5de  Vishwapremi-Student-Setup.exe
+fa4cb9641b06ea1334acab8330789d0feb12ab5b6b1ffd4366a44f3b9b350797  Vishwapremi-Teacher-Setup.exe
+2f1a8f2e6f80c9b1d94a41fc039120154615dfc611a76fb75d22fb07683ff5fe  Vishwapremi-Student-Setup.exe

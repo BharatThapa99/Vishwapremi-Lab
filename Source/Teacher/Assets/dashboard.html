@@ -538,7 +538,7 @@
   <div class="modal-backdrop" id="modalNotice">
     <div class="modal-window">
       <div class="modal-header">
-        <h3>💬 Send Classroom Notice</h3>
+        <h3>Send Classroom Notice</h3>
         <button class="modal-close" onclick="closeModal('modalNotice')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="modal-body">
@@ -567,7 +567,7 @@
   <div class="modal-backdrop" id="modalWebsite">
     <div class="modal-window">
       <div class="modal-header">
-        <h3>🌐 Open Lesson Website</h3>
+        <h3>Open Lesson Website</h3>
         <button class="modal-close" onclick="closeModal('modalWebsite')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="modal-body">
@@ -594,19 +594,19 @@
   <div class="modal-backdrop" id="modalPower">
     <div class="modal-window">
       <div class="modal-header">
-        <h3>⚡ Classroom Power Controls</h3>
+        <h3>Classroom Power Controls</h3>
         <button class="modal-close" onclick="closeModal('modalPower')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="modal-body">
         <p style="font-size:13px; color:var(--text-muted);">Choose a power action to apply to selected computers:</p>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-          <button class="btn btn-rose" style="padding:14px;" onclick="submitPower('shutdown')">🛑 Shut Down PCs</button>
-          <button class="btn btn-purple" style="padding:14px;" onclick="submitPower('restart')">🔄 Restart PCs</button>
-          <button class="btn" style="padding:14px;" onclick="submitPower('sleep')">💤 Sleep / Standby</button>
-          <button class="btn" style="padding:14px;" onclick="submitPower('logoff')">👤 Log Off Users</button>
+          <button class="btn btn-rose" style="padding:14px;" onclick="submitPower('shutdown')">Shut Down PCs</button>
+          <button class="btn btn-purple" style="padding:14px;" onclick="submitPower('restart')">Restart PCs</button>
+          <button class="btn" style="padding:14px;" onclick="submitPower('sleep')">Sleep / Standby</button>
+          <button class="btn" style="padding:14px;" onclick="submitPower('logoff')">Log Off Users</button>
         </div>
         <div style="margin-top:8px;">
-          <button class="btn btn-emerald" style="width:100%; padding:12px;" onclick="submitPower('wake')">⚡ Wake-on-LAN (Turn On Sleeping PCs)</button>
+          <button class="btn btn-emerald" style="width:100%; padding:12px;" onclick="submitPower('wake')">Wake-on-LAN (Turn On Sleeping PCs)</button>
         </div>
       </div>
       <div class="modal-footer">
@@ -619,13 +619,13 @@
   <div class="modal-backdrop" id="modalFilter">
     <div class="modal-window">
       <div class="modal-header">
-        <h3>🛡️ Internet & Website Filter</h3>
+        <h3>Internet & Website Filter</h3>
         <button class="modal-close" onclick="closeModal('modalFilter')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="modal-body">
         <div style="display:flex; gap:10px; margin-bottom:6px;">
-          <button class="btn btn-rose" style="flex:1;" onclick="submitFilterAction('block-internet')">🚫 Block All Internet</button>
-          <button class="btn btn-emerald" style="flex:1;" onclick="submitFilterAction('allow-internet')">🌐 Unblock All</button>
+          <button class="btn btn-rose" style="flex:1;" onclick="submitFilterAction('block-internet')">Block All Internet</button>
+          <button class="btn btn-emerald" style="flex:1;" onclick="submitFilterAction('allow-internet')">Unblock All</button>
         </div>
         <div class="form-group">
           <label>Website Domain Rules (one per line, e.g. youtube.com):</label>
@@ -647,7 +647,7 @@
   <div class="modal-backdrop" id="modalAddPc">
     <div class="modal-window">
       <div class="modal-header">
-        <h3>➕ Add Student Computer</h3>
+        <h3>Add Student Computer</h3>
         <button class="modal-close" onclick="closeModal('modalAddPc')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="modal-body">
@@ -672,7 +672,7 @@
   <div class="modal-backdrop" id="modalBackup">
     <div class="modal-window">
       <div class="modal-header">
-        <h3>📦 Lab Profile Backup & Migration</h3>
+        <h3>Lab Profile Backup & Migration</h3>
         <button class="modal-close" onclick="closeModal('modalBackup')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="modal-body">
@@ -681,10 +681,10 @@
         </p>
         <div style="display:flex; flex-direction:column; gap:10px;">
           <button class="btn btn-primary" style="padding:12px;" onclick="triggerAction('export-profile')">
-            📤 Export Lab Profile (.vpbak)
+            Export Lab Profile (.vpbak)
           </button>
           <button class="btn" style="padding:12px;" onclick="triggerAction('import-profile')">
-            📥 Import Lab Profile from USB
+            Import Lab Profile from USB
           </button>
         </div>
       </div>
@@ -698,20 +698,20 @@
   <div class="modal-backdrop" id="modalHelp">
     <div class="modal-window" style="max-width: 600px;">
       <div class="modal-header">
-        <h3>📖 Vishwapremi Lab Guide & Shortcuts</h3>
+        <h3>Vishwapremi Lab Guide & Shortcuts</h3>
         <button class="modal-close" onclick="closeModal('modalHelp')"><svg class="icon" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
       <div class="modal-body" style="font-size:13px; line-height:1.6; color:var(--text-muted); max-height: 420px; overflow-y:auto;">
-        <h4 style="color:var(--text-main); margin-bottom:4px;">🎮 Remote Control & Assistance</h4>
+        <h4 style="color:var(--text-main); margin-bottom:4px;">Remote Control & Assistance</h4>
         <p>Select any online student computer and click <strong>Remote Control</strong>. You can click, drag, scroll, and type directly on their desktop in real-time over encrypted TLS.</p>
         
-        <h4 style="color:var(--text-main); margin-top:12px; margin-bottom:4px;">📺 Reverse Sharing (Smartboard Projection)</h4>
+        <h4 style="color:var(--text-main); margin-top:12px; margin-bottom:4px;">Reverse Sharing (Smartboard Projection)</h4>
         <p>Project a student's screen in 1080p onto the teacher monitor or smartboard. Press <kbd>Space</kbd> to freeze frame, or <kbd>F11</kbd> for true borderless fullscreen.</p>
 
-        <h4 style="color:var(--text-main); margin-top:12px; margin-bottom:4px;">📦 Zero-USB Profile Migration</h4>
+        <h4 style="color:var(--text-main); margin-top:12px; margin-bottom:4px;">Zero-USB Profile Migration</h4>
         <p>Export your encrypted <kbd>.vpbak</kbd> profile. When importing on another laptop or smartboard, all student PCs reconnect automatically.</p>
 
-        <h4 style="color:var(--text-main); margin-top:12px; margin-bottom:4px;">⚡ Power Controls & Wake-on-LAN</h4>
+        <h4 style="color:var(--text-main); margin-top:12px; margin-bottom:4px;">Power Controls & Wake-on-LAN</h4>
         <p>Remotely shut down, restart, sleep, or wake up computers without walking to each desk.</p>
       </div>
       <div class="modal-footer">
@@ -809,8 +809,8 @@
           <div class="card-preview">
             ${previewContent}
             <div class="card-overlay-actions">
-              <button class="btn btn-sm btn-emerald" onclick="event.stopPropagation(); startAssist('${d.id}')">🎮 Assist</button>
-              <button class="btn btn-sm btn-purple" onclick="event.stopPropagation(); startShare('${d.id}')">📺 Project</button>
+              <button class="btn btn-sm btn-emerald" onclick="event.stopPropagation(); startAssist('${d.id}')">Assist</button>
+              <button class="btn btn-sm btn-purple" onclick="event.stopPropagation(); startShare('${d.id}')">Project</button>
             </div>
           </div>
           <div class="card-footer">
@@ -820,7 +820,7 @@
             </div>
             <div class="footer-row" style="color:var(--text-subtle);">
               <span>Seen: ${escapeHtml(d.seen || 'Just now')}</span>
-              <span>${d.online ? '🟢 8766' : '⚪'}</span>
+              <span>${d.online ? 'Port 8766' : 'Offline'}</span>
             </div>
           </div>
         `;
@@ -843,8 +843,8 @@
           <td>${escapeHtml(d.computer || '—')}</td>
           <td>${escapeHtml(d.seen || '—')}</td>
           <td style="text-align:right;">
-            <button class="btn btn-sm" onclick="event.stopPropagation(); startAssist('${d.id}')">🎮 Assist</button>
-            <button class="btn btn-sm" onclick="event.stopPropagation(); startShare('${d.id}')">📺 Project</button>
+            <button class="btn btn-sm" onclick="event.stopPropagation(); startAssist('${d.id}')">Assist</button>
+            <button class="btn btn-sm" onclick="event.stopPropagation(); startShare('${d.id}')">Project</button>
           </td>
         `;
         tr.onclick = () => toggleSelect(d.id);

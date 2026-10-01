@@ -14,7 +14,7 @@ internal sealed class TeacherForm : Form
     private readonly Controller controller=new();
     private readonly DataGridView grid=new(),history=new();
     private readonly Label summary=Desktop.Label("Starting your lab…",10.5f,true),status=Desktop.Label(""),network=Desktop.Label("");
-    private readonly TextBox searchBox=new(){Width=220,Font=new Font("Segoe UI",9.5f),PlaceholderText="🔍 Search computers…"};
+    private readonly TextBox searchBox=new(){Width=220,Font=new Font("Segoe UI",9.5f),PlaceholderText="Search computers…"};
     private readonly System.Windows.Forms.Timer timer=new(){Interval=3000};
     private readonly NotifyIcon tray=new(){Icon=SystemIcons.Application,Text="Vishwapremi Teacher",Visible=true};
     private readonly TableLayoutPanel root;
@@ -41,8 +41,8 @@ internal sealed class TeacherForm : Form
         headerRight.Controls.Add(statusBadge);header.Controls.Add(headerRight,1,0);root.Controls.Add(header,0,0);
 
         var tools=new FlowLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(0,4,0,0)};
-        tools.Controls.Add(Desktop.Button("🎨 Modern Teams UI",(_,_)=>SwitchUi(true),true));
-        tools.Controls.Add(Desktop.Button("🖥️ Live Screens",(_,_)=>OpenScreenMonitor(),true));tools.Controls.Add(Desktop.Button("🔄 Update Student Apps",(_,_)=>UpdateStudentApps()));tools.Controls.Add(Desktop.Button("+ Add computer",(_,_)=>AddComputer()));tools.Controls.Add(Desktop.Button("📦 Export Profile",(_,_)=>ExportProfile()));tools.Controls.Add(Desktop.Button("📥 Import Profile",(_,_)=>ImportProfile()));tools.Controls.Add(Desktop.Button("Allow lab connections",(_,_)=>Firewall()));tools.Controls.Add(Desktop.Button("Remove selected",(_,_)=>Remove()));tools.Controls.Add(Desktop.Button("Lock teacher app",(_,_)=>LockApp()));tools.Controls.Add(Desktop.Button("Help",(_,_)=>Help()));root.Controls.Add(tools,0,1);
+        tools.Controls.Add(Desktop.Button("Modern Teams UI",(_,_)=>SwitchUi(true),true));
+        tools.Controls.Add(Desktop.Button("Live Screens",(_,_)=>OpenScreenMonitor(),true));tools.Controls.Add(Desktop.Button("Update Student Apps",(_,_)=>UpdateStudentApps()));tools.Controls.Add(Desktop.Button("+ Add computer",(_,_)=>AddComputer()));tools.Controls.Add(Desktop.Button("Export Profile",(_,_)=>ExportProfile()));tools.Controls.Add(Desktop.Button("Import Profile",(_,_)=>ImportProfile()));tools.Controls.Add(Desktop.Button("Allow lab connections",(_,_)=>Firewall()));tools.Controls.Add(Desktop.Button("Remove selected",(_,_)=>Remove()));tools.Controls.Add(Desktop.Button("Lock teacher app",(_,_)=>LockApp()));tools.Controls.Add(Desktop.Button("Help",(_,_)=>Help()));root.Controls.Add(tools,0,1);
 
         StyleGrid(grid);grid.Columns.Add(new DataGridViewCheckBoxColumn{Name="Select",HeaderText="Select",Width=60});grid.Columns.Add("Name","Computer");grid.Columns.Add("State","Connection");grid.Columns.Add("User","Windows user");grid.Columns.Add("Host","Device name");grid.Columns.Add("Last","Last seen");
         foreach(DataGridViewColumn c in grid.Columns)if(c.Name!="Select")c.ReadOnly=true;
@@ -58,16 +58,16 @@ internal sealed class TeacherForm : Form
         root.Controls.Add(grid,0,2);
 
         var actions=new FlowLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(0,6,0,0)};
-        actions.Controls.Add(Desktop.Button("☑️ Select online",(_,_)=>{foreach(DataGridViewRow r in grid.Rows)r.Cells[0].Value=r.Cells[2].Value as string=="Connected";}));
-        actions.Controls.Add(Desktop.Button("◻️ Clear",(_,_)=>{foreach(DataGridViewRow r in grid.Rows)r.Cells[0].Value=false;}));
-        actions.Controls.Add(Desktop.Button("📺 Reverse Share",(_,_)=>ReverseShareSelected(),true));
-        actions.Controls.Add(Desktop.Button("🎮 Remote Control",(_,_)=>RemoteControlSelected(),true));
-        actions.Controls.Add(Desktop.Button("📁 Share File",(_,_)=>ShareFile(),true));actions.Controls.Add(Desktop.Button("🌐 Open Website",(_,_)=>Send("website"),true));actions.Controls.Add(Desktop.Button("💬 Send Notice",(_,_)=>Send("message")));
+        actions.Controls.Add(Desktop.Button("Select online",(_,_)=>{foreach(DataGridViewRow r in grid.Rows)r.Cells[0].Value=r.Cells[2].Value as string=="Connected";}));
+        actions.Controls.Add(Desktop.Button("Clear",(_,_)=>{foreach(DataGridViewRow r in grid.Rows)r.Cells[0].Value=false;}));
+        actions.Controls.Add(Desktop.Button("Reverse Share",(_,_)=>ReverseShareSelected(),true));
+        actions.Controls.Add(Desktop.Button("Remote Control",(_,_)=>RemoteControlSelected(),true));
+        actions.Controls.Add(Desktop.Button("Share File",(_,_)=>ShareFile(),true));actions.Controls.Add(Desktop.Button("Open Website",(_,_)=>Send("website"),true));actions.Controls.Add(Desktop.Button("Send Notice",(_,_)=>Send("message")));
         actions.Controls.Add(new Label{Text="|",ForeColor=Desktop.Border,AutoSize=true,Padding=new Padding(2,8,2,0),Font=new Font("Segoe UI",11)});
-        actions.Controls.Add(Desktop.Button("🔒 Lock PCs",(_,_)=>Send("lock")));actions.Controls.Add(Desktop.Button("⚡ Power",(_,_)=>PowerDialog()));
+        actions.Controls.Add(Desktop.Button("Lock PCs",(_,_)=>Send("lock")));actions.Controls.Add(Desktop.Button("Power",(_,_)=>PowerDialog()));
         actions.Controls.Add(new Label{Text="|",ForeColor=Desktop.Border,AutoSize=true,Padding=new Padding(2,8,2,0),Font=new Font("Segoe UI",11)});
-        actions.Controls.Add(Desktop.Button("🚫 Block Internet",(_,_)=>Send("block-internet")));actions.Controls.Add(Desktop.Button("🌐 Unblock Internet",(_,_)=>Send("unblock-internet")));
-        actions.Controls.Add(Desktop.Button("⚙️ Filter Websites",(_,_)=>{var ids=Selected();if(ids.Length==0){MessageBox.Show("Select one or more connected computers first.","Classroom tools");return;}using var f=Desktop.Dialog("Website filtering",460);var p=Desktop.Stack();f.Controls.Add(p);p.Controls.Add(Desktop.Label("Website filtering",19,true));p.Controls.Add(Desktop.Label("Enter domain names, one per line (e.g. youtube.com)"));var input=new TextBox{Width=430,Height=140,Multiline=true,MaxLength=4000};p.Controls.Add(input);var btns=new FlowLayoutPanel{Width=450,Height=40};var action="";btns.Controls.Add(Desktop.Button("Blacklist these sites",(_,_)=>{try{Files.ValidateAction("blacklist",input.Text.Trim());action="blacklist";f.DialogResult=DialogResult.OK;}catch(Exception e){Desktop.Error(e);}}));btns.Controls.Add(Desktop.Button("Whitelist only these",(_,_)=>{try{Files.ValidateAction("whitelist",input.Text.Trim());action="whitelist";f.DialogResult=DialogResult.OK;}catch(Exception e){Desktop.Error(e);}}));p.Controls.Add(btns);if(f.ShowDialog(this)==DialogResult.OK){try{var count=store.Queue(ids,action,input.Text.Trim());status.Text=$"Sent to {count} online computer(s). Check the result below.";RefreshRoom();}catch(Exception e){Desktop.Error(e);}}}));
+        actions.Controls.Add(Desktop.Button("Block Internet",(_,_)=>Send("block-internet")));actions.Controls.Add(Desktop.Button("Unblock Internet",(_,_)=>Send("unblock-internet")));
+        actions.Controls.Add(Desktop.Button("Filter Websites",(_,_)=>{var ids=Selected();if(ids.Length==0){MessageBox.Show("Select one or more connected computers first.","Classroom tools");return;}using var f=Desktop.Dialog("Website filtering",460);var p=Desktop.Stack();f.Controls.Add(p);p.Controls.Add(Desktop.Label("Website filtering",19,true));p.Controls.Add(Desktop.Label("Enter domain names, one per line (e.g. youtube.com)"));var input=new TextBox{Width=430,Height=140,Multiline=true,MaxLength=4000};p.Controls.Add(input);var btns=new FlowLayoutPanel{Width=450,Height=40};var action="";btns.Controls.Add(Desktop.Button("Blacklist these sites",(_,_)=>{try{Files.ValidateAction("blacklist",input.Text.Trim());action="blacklist";f.DialogResult=DialogResult.OK;}catch(Exception e){Desktop.Error(e);}}));btns.Controls.Add(Desktop.Button("Whitelist only these",(_,_)=>{try{Files.ValidateAction("whitelist",input.Text.Trim());action="whitelist";f.DialogResult=DialogResult.OK;}catch(Exception e){Desktop.Error(e);}}));p.Controls.Add(btns);if(f.ShowDialog(this)==DialogResult.OK){try{var count=store.Queue(ids,action,input.Text.Trim());status.Text=$"Sent to {count} online computer(s). Check the result below.";RefreshRoom();}catch(Exception e){Desktop.Error(e);}}}));
         actions.Controls.Add(Desktop.Button("Clear Filters",(_,_)=>Send("clear-filter")));root.Controls.Add(actions,0,3);
 
         var stats=new TableLayoutPanel{Dock=DockStyle.Fill,ColumnCount=2,RowCount=1};
@@ -254,12 +254,12 @@ internal sealed class TeacherForm : Form
         var offlineCount=selectedDevices.Count-onlineCount;
 
         using var f=Desktop.Dialog("Power Management",490);var p=Desktop.Stack();f.Controls.Add(p);
-        p.Controls.Add(Desktop.Label("⚡ Classroom Power Controls",18,true));
+        p.Controls.Add(Desktop.Label("Classroom Power Controls",18,true));
         p.Controls.Add(Desktop.Label($"Selected: {selectedDevices.Count} computer(s)  ({onlineCount} online, {offlineCount} offline)"));
 
         var buttons=new FlowLayoutPanel{Width=450,Height=260,FlowDirection=FlowDirection.TopDown,WrapContents=false};
 
-        var btnShut=Desktop.Button("🛑 Shut Down Selected Computers…",(_,_)=>
+        var btnShut=Desktop.Button("Shut Down Selected Computers…",(_,_)=>
         {
             if(onlineCount==0){MessageBox.Show("No online computers selected to shut down.","Power");return;}
             var choice=MessageBox.Show($"Shut down {onlineCount} online computer(s)?\n\nClick YES to warn students with a 15-second countdown.\nClick NO to shut down immediately (0s).\nClick CANCEL to abort.","Shut Down Computers",MessageBoxButtons.YesNoCancel,MessageBoxIcon.Warning);
@@ -270,7 +270,7 @@ internal sealed class TeacherForm : Form
         });
         btnShut.Width=430;btnShut.Height=36;buttons.Controls.Add(btnShut);
 
-        var btnRestart=Desktop.Button("🔄 Restart Selected Computers…",(_,_)=>
+        var btnRestart=Desktop.Button("Restart Selected Computers…",(_,_)=>
         {
             if(onlineCount==0){MessageBox.Show("No online computers selected to restart.","Power");return;}
             if(MessageBox.Show($"Restart {onlineCount} online computer(s)?\n\nComputers will restart in 5 seconds.","Restart Computers",MessageBoxButtons.OKCancel,MessageBoxIcon.Question)!=DialogResult.OK)return;
@@ -279,7 +279,7 @@ internal sealed class TeacherForm : Form
         });
         btnRestart.Width=430;btnRestart.Height=36;buttons.Controls.Add(btnRestart);
 
-        var btnLogoff=Desktop.Button("👤 Log Off Current Users…",(_,_)=>
+        var btnLogoff=Desktop.Button("Log Off Current Users…",(_,_)=>
         {
             if(onlineCount==0){MessageBox.Show("No online computers selected to log off.","Power");return;}
             if(MessageBox.Show($"Sign out Windows user sessions on {onlineCount} online computer(s)?","Log Off Users",MessageBoxButtons.OKCancel,MessageBoxIcon.Question)!=DialogResult.OK)return;
@@ -288,7 +288,7 @@ internal sealed class TeacherForm : Form
         });
         btnLogoff.Width=430;btnLogoff.Height=36;buttons.Controls.Add(btnLogoff);
 
-        var btnSleep=Desktop.Button("💤 Sleep / Suspend Computers…",(_,_)=>
+        var btnSleep=Desktop.Button("Sleep / Suspend Computers…",(_,_)=>
         {
             if(onlineCount==0){MessageBox.Show("No online computers selected to put to sleep.","Power");return;}
             if(MessageBox.Show($"Put {onlineCount} computer(s) into sleep / standby mode?","Sleep Computers",MessageBoxButtons.OKCancel,MessageBoxIcon.Question)!=DialogResult.OK)return;
@@ -297,7 +297,7 @@ internal sealed class TeacherForm : Form
         });
         btnSleep.Width=430;btnSleep.Height=36;buttons.Controls.Add(btnSleep);
 
-        var btnWake=Desktop.Button("⚡ Wake-on-LAN (Turn On Sleeping/Off PCs)",(_,_)=>
+        var btnWake=Desktop.Button("Wake-on-LAN (Turn On Sleeping/Off PCs)",(_,_)=>
         {
             var sent=0;var noMac=0;
             foreach(var d in selectedDevices)
@@ -313,7 +313,7 @@ internal sealed class TeacherForm : Form
         });
         btnWake.Width=430;btnWake.Height=36;buttons.Controls.Add(btnWake);
 
-        var btnAbort=Desktop.Button("❌ Cancel / Abort Pending Shutdown",(_,_)=>
+        var btnAbort=Desktop.Button("Cancel / Abort Pending Shutdown",(_,_)=>
         {
             var count=store.Queue(ids,"abort-shutdown","");
             status.Text=$"Abort shutdown sent to {count} computer(s).";RefreshRoom();f.DialogResult=DialogResult.OK;
@@ -379,7 +379,7 @@ internal sealed class TeacherForm : Form
             try
             {
                 ProfileMigration.Export(sfd.FileName,password,store);
-                MessageBox.Show($"Lab profile exported successfully to:\n{sfd.FileName}\n\nThis single file contains your teacher security certificate and all {store.Snapshot().Devices.Count} computer pairings.\n\nTo use on another teacher laptop or smartboard:\n1. Copy this file to a USB drive.\n2. Open Vishwapremi Teacher on the other computer.\n3. Click '📥 Import Profile' and enter your teacher password. All student computers will connect automatically with zero USB hassle!","Export Complete",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                MessageBox.Show($"Lab profile exported successfully to:\n{sfd.FileName}\n\nThis single file contains your teacher security certificate and all {store.Snapshot().Devices.Count} computer pairings.\n\nTo use on another teacher laptop or smartboard:\n1. Copy this file to a USB drive.\n2. Open Vishwapremi Teacher on the other computer.\n3. Click 'Import Profile' and enter your teacher password. All student computers will connect automatically with zero USB hassle!","Export Complete",MessageBoxButtons.OK,MessageBoxIcon.Information);
             }
             catch(Exception ex)
             {
@@ -423,7 +423,7 @@ internal sealed class TeacherForm : Form
             }
         }
     }
-    private void Help()=>MessageBox.Show("REMOTE ASSISTANCE (REMOTE CONTROL)\nClick '🎮 Remote Control' (or toggle it inside Reverse Share) to take direct mouse and keyboard control of a student's computer. Click and type directly on the student's screen to help them fix errors or guide them through software.\n\nLAB PROFILE MIGRATION & BACKUP\nClick '📦 Export Profile' to save your security certificate and all student computer pairings into a single encrypted file (.vpbak) onto a USB drive. On any other teacher laptop or smartboard, click '📥 Import Profile' to restore it. All student computers will immediately connect to the new laptop without needing any new pairing files or USB visits!\n\nREVERSE SHARING (SMARTBOARD / MONITOR PROJECTION)\nClick '📺 Reverse Share' (or double-click any student computer in the list) to project that student's screen in high-definition 1080p onto the teacher monitor or smartboard. Includes Freeze Frame (Space), Fullscreen (F11), and quick PC switching.\n\nPOWER MANAGEMENT & WAKE-ON-LAN\nClick '⚡ Power' to shut down, restart, log off, or suspend selected computers. Use Wake-on-LAN to remotely turn on sleeping or powered-off computers without walking around the lab.\n\nFILE SHARING & AUTO-UPDATE\nClick 'Share File' to send any assignment, PDF or document directly to student Desktops with optional auto-open.\nClick 'Update Student Apps' to push a new version of the Student installer to all connected PCs silently over the network with no USB drive needed.\n\nLIVE SCREEN MONITOR\nClick 'Live Screens' to view live thumbnails of all student computers. Double-click any screen to open a high-resolution live view, lock the computer, or save a screenshot.\n\nINTERNET CONTROL\nBlock Internet cuts all internet access on selected computers. Unblock Internet restores it. Filter Websites lets you blacklist or whitelist specific sites. Clear Filters removes all filtering.\n\nGET STARTED\n1. Allow lab connections once and approve the administrator request.\n2. Add each computer and save its pairing file to a USB drive.\n3. Install the Student app in the student's usual Windows account and import its file. Student finds the correct teacher address automatically.\n4. Select connected computers to start a lesson.\n\nDesigned by Bharat Thapa", "Using your lab",MessageBoxButtons.OK,MessageBoxIcon.Information);
+    private void Help()=>MessageBox.Show("REMOTE ASSISTANCE (REMOTE CONTROL)\nClick 'Remote Control' (or toggle it inside Reverse Share) to take direct mouse and keyboard control of a student's computer. Click and type directly on the student's screen to help them fix errors or guide them through software.\n\nLAB PROFILE MIGRATION & BACKUP\nClick 'Export Profile' to save your security certificate and all student computer pairings into a single encrypted file (.vpbak) onto a USB drive. On any other teacher laptop or smartboard, click 'Import Profile' to restore it. All student computers will immediately connect to the new laptop without needing any new pairing files or USB visits!\n\nREVERSE SHARING (SMARTBOARD / MONITOR PROJECTION)\nClick 'Reverse Share' (or double-click any student computer in the list) to project that student's screen in high-definition 1080p onto the teacher monitor or smartboard. Includes Freeze Frame (Space), Fullscreen (F11), and quick PC switching.\n\nPOWER MANAGEMENT & WAKE-ON-LAN\nClick 'Power' to shut down, restart, log off, or suspend selected computers. Use Wake-on-LAN to remotely turn on sleeping or powered-off computers without walking around the lab.\n\nFILE SHARING & AUTO-UPDATE\nClick 'Share File' to send any assignment, PDF or document directly to student Desktops with optional auto-open.\nClick 'Update Student Apps' to push a new version of the Student installer to all connected PCs silently over the network with no USB drive needed.\n\nLIVE SCREEN MONITOR\nClick 'Live Screens' to view live thumbnails of all student computers. Double-click any screen to open a high-resolution live view, lock the computer, or save a screenshot.\n\nINTERNET CONTROL\nBlock Internet cuts all internet access on selected computers. Unblock Internet restores it. Filter Websites lets you blacklist or whitelist specific sites. Clear Filters removes all filtering.\n\nGET STARTED\n1. Allow lab connections once and approve the administrator request.\n2. Add each computer and save its pairing file to a USB drive.\n3. Install the Student app in the student's usual Windows account and import its file. Student finds the correct teacher address automatically.\n4. Select connected computers to start a lesson.\n\nDesigned by Bharat Thapa", "Using your lab",MessageBoxButtons.OK,MessageBoxIcon.Information);
     private void LockApp(){locked=true;Hide();Restore();}
     private void Restore(){if(locked){if(Desktop.AskPassword(null,false,store)==null)return;locked=false;}Show();WindowState=FormWindowState.Normal;Activate();}
     private void Exit(){if(MessageBox.Show("Stop the teacher controller? Student computers will disconnect until you open it again.","Exit controller",MessageBoxButtons.OKCancel)!=DialogResult.OK)return;exiting=true;Close();}
